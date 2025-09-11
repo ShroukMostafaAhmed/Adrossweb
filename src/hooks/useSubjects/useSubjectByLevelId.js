@@ -1,5 +1,3 @@
-
-
 // useGetLevelsByStageId.jsx
 import { useState, useCallback } from "react";
 import AxiosInstance from "../../utils/AxiosInstance.jsx";
@@ -14,17 +12,16 @@ function useSubjectByLevelId() {
     if (!levelId) return;
     setLoading(true);
     setError(null);
-    try {  
-      const res = await AxiosInstance.get(`/api/Subject/by-level/${levelId}`);
+    try {
+      const res = await AxiosInstance.get(`/Subject/by-level/${levelId}`);
       //const res = await AxiosInstance.get(`api/Stages/{stageId}/${stageId}`);
 
       // نفترض الـ API يرجع statusCode = 0 للنجاح
-     if (res.data.statusCode === 200) {
-  setLevels(res.data.data || []);
-} else {
-  throw new Error(res.data.message || "فشل في جلب الصفوف");
-}
-
+      if (res.data.statusCode === 200) {
+        setLevels(res.data.data || []);
+      } else {
+        throw new Error(res.data.message || "فشل في جلب الصفوف");
+      }
     } catch (err) {
       setError(err.message || "حدث خطأ أثناء جلب الصفوف");
       setLevels([]);

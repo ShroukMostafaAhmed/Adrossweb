@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import AxiosInstance from '../../utils/AxiosInstance';
+import { useState } from "react";
+import AxiosInstance from "../../utils/AxiosInstance";
 
 function useCreateSkill() {
   const [loading, setLoading] = useState(false);
@@ -8,7 +8,7 @@ function useCreateSkill() {
   const createSkill = async (data) => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.post('/api/Skills/CreateSkill', data);
+      const res = await AxiosInstance.post("/Skills/CreateSkill", data);
       return res.data;
     } catch (err) {
       setError(err);

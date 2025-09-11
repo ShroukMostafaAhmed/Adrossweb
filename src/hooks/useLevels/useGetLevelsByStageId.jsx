@@ -12,17 +12,16 @@ function useGetLevelsByStageId() {
     if (!stageId) return;
     setLoading(true);
     setError(null);
-    try {                      
-      const res = await AxiosInstance.get(`/api/Level/by-stage/${stageId}`);
+    try {
+      const res = await AxiosInstance.get(`/Level/by-stage/${stageId}`);
       //const res = await AxiosInstance.get(`api/Stages/{stageId}/${stageId}`);
 
       // نفترض الـ API يرجع statusCode = 0 للنجاح
-     if (res.data.statusCode === 200) {
-  setLevels(res.data.data || []);
-} else {
-  throw new Error(res.data.message || "فشل في جلب الصفوف");
-}
-
+      if (res.data.statusCode === 200) {
+        setLevels(res.data.data || []);
+      } else {
+        throw new Error(res.data.message || "فشل في جلب الصفوف");
+      }
     } catch (err) {
       setError(err.message || "حدث خطأ أثناء جلب الصفوف");
       setLevels([]);

@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import AxiosInstance from '../../utils/AxiosInstance';
+import { useState, useEffect } from "react";
+import AxiosInstance from "../../utils/AxiosInstance";
 
 function useGetAllSkills() {
   const [skills, setSkills] = useState([]);
@@ -9,7 +9,7 @@ function useGetAllSkills() {
   const fetchSkills = async () => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.get('/api/Skills/GetAllSkills');
+      const res = await AxiosInstance.get("/Skills/GetAllSkills");
       setSkills(res.data);
     } catch (err) {
       setError(err);

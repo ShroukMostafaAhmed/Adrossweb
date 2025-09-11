@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import AxiosInstance from '../../utils/AxiosInstance';
+import { useState } from "react";
+import AxiosInstance from "../../utils/AxiosInstance";
 
 function useDeleteSkill() {
   const [loading, setLoading] = useState(false);
@@ -8,7 +8,7 @@ function useDeleteSkill() {
   const deleteSkill = async (skillId) => {
     setLoading(true);
     try {
-      await AxiosInstance.delete(`/api/Skills/delete/${skillId}`);
+      await AxiosInstance.delete(`/Skills/delete/${skillId}`);
     } catch (err) {
       setError(err);
     } finally {

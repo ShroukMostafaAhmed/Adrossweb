@@ -11,14 +11,11 @@ const useCreateEvent = () => {
 
     try {
       // Send data in the format expected by the API
-      const response = await AxiosInstance.post(
-        "/api/StudentCalenders/Create",
-        {
-          date: eventData.date, // ISO date string
-          notes: eventData.notes, // Keep as notes
-          color: eventData.color, // Color value
-        }
-      );
+      const response = await AxiosInstance.post("/StudentCalenders/Create", {
+        date: eventData.date, // ISO date string
+        notes: eventData.notes, // Keep as notes
+        color: eventData.color, // Color value
+      });
 
       console.log("Create event response:", response.data);
       setIsLoading(false);

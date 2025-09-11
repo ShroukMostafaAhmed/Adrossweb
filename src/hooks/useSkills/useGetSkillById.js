@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from 'react';
-import AxiosInstance from '../../utils/AxiosInstance';
+import { useState, useEffect, useCallback } from "react";
+import AxiosInstance from "../../utils/AxiosInstance";
 
 function useGetSkillById(skillId) {
   const [skill, setSkill] = useState(null);
@@ -9,7 +9,7 @@ function useGetSkillById(skillId) {
   const fetchSkill = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.get(`/api/Skills/SkillById/${skillId}`);
+      const res = await AxiosInstance.get(`/Skills/SkillById/${skillId}`);
       setSkill(res.data?.data); // only use the "data" key
       setError(null); // clear any previous error
     } catch (err) {

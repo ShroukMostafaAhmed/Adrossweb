@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import AxiosInstance from "../../utils/AxiosInstance.jsx";
 
 function useStagesViewAll() {
@@ -9,7 +9,7 @@ function useStagesViewAll() {
   const getAllStages = async () => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.get('/api/stages/all');
+      const res = await AxiosInstance.get("/stages/all");
       if (res.data.statusCode === 200 || res.data.message === "Stages List") {
         setStages(res.data.data);
       } else {

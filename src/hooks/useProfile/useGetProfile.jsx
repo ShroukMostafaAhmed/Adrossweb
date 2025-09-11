@@ -9,8 +9,8 @@ const useGetProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await AxiosInstance.get("/api/Student/profile");
-        setData(response.data.data || {}); 
+        const response = await AxiosInstance.get("/Student/profile");
+        setData(response.data.data || {});
       } catch (err) {
         console.error(err);
         setError("فشل تحميل البيانات");

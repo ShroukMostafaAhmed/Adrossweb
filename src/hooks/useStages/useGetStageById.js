@@ -10,8 +10,11 @@ function useGetStageById() {
     setLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get(`/api/stages/${id}`);
-      if (res.data.statusCode === 200 || res.data.message === "Banner Retrieved Successfully") {
+      const res = await AxiosInstance.get(`/stages/${id}`);
+      if (
+        res.data.statusCode === 200 ||
+        res.data.message === "Banner Retrieved Successfully"
+      ) {
         setStage(res.data.data);
       } else {
         throw new Error(res.data.message || "فشل في جلب المرحلة");

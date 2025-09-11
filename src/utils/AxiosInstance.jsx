@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AxiosInstance = axios.create({
-  baseURL: "http://adrosapi.runasp.net",
+  baseURL: "/api",
 });
 
 AxiosInstance.interceptors.request.use(
@@ -17,12 +17,12 @@ AxiosInstance.interceptors.request.use(
 
 AxiosInstance.interceptors.response.use(
   (response) => response,
-   (error) => {
+  (error) => {
     if (error.response && error.response.status === 401) {
       localStorage.removeItem("token");
       localStorage.removeItem("userId");
       localStorage.removeItem("validTo");
-      window.location.href = "/login"; 
+      window.location.href = "/login";
     }
     return Promise.reject(error);
   }
