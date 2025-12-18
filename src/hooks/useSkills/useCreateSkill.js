@@ -8,7 +8,7 @@ function useCreateSkill() {
   const createSkill = async (data) => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.post("/Skills/CreateSkill", data);
+      const res = await AxiosInstance.post("/api/Skills/CreateSkill", data);
       return res.data;
     } catch (err) {
       setError(err);

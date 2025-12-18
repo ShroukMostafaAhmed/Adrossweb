@@ -8,7 +8,7 @@ function useUpdateSkill() {
   const updateSkill = async (skillId, data) => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.put(`/Skills/update/${skillId}`, data);
+      const res = await AxiosInstance.put(`api/Skills/update/${skillId}`, data);
       return res.data;
     } catch (err) {
       setError(err);

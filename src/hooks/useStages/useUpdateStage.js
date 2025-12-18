@@ -11,7 +11,7 @@ function UseUpdateStage() {
 
   const updateStage = async (id, data) => {
     setIsLoading(true);
-    await AxiosInstance.put(`/stages/update/${id}`, data)
+    await AxiosInstance.put(`/api/stages/${id}`, data)
       .then((res) => {
         if (res.data.statusCode == 200 || res.data.message == "Stage Updated") {
           Swal.fire({
