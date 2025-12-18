@@ -9,7 +9,7 @@ function useGetSkillById(skillId) {
   const fetchSkill = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.get(`/Skills/SkillById/${skillId}`);
+      const res = await AxiosInstance.get(`/api/Skills/SkillById/${skillId}`);
       setSkill(res.data?.data); // only use the "data" key
       setError(null); // clear any previous error
     } catch (err) {

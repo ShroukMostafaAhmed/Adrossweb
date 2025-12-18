@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AxiosInstance = axios.create({
-  baseURL: "/api",
+  baseURL: "http://adros-mrashed.runasp.net/",
 });
 
 AxiosInstance.interceptors.request.use(

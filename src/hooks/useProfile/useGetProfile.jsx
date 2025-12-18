@@ -9,7 +9,7 @@ const useGetProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await AxiosInstance.get("/Student/profile");
+        const response = await AxiosInstance.get("/api/Student/profile");
         setData(response.data.data || {});
       } catch (err) {
         console.error(err);

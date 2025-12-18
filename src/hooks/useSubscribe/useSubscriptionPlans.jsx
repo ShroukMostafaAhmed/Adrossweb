@@ -10,17 +10,17 @@ export default function useSubscriptionPlans() {
         try {
             setLoading(true);
             setError(null);
-            
-            const response = await axios.get('http://adrosapi.runasp.net/api/Subscriptions/all');
-            
-            
+
+            const response = await axios.get('/api/Subscriptions/all');
+
+
             let plansData = response.data;
-            
+
             // If response has a data property, use that
             if (response.data && response.data.data) {
                 plansData = response.data.data;
             }
-            
+
             // Ensure we have an array
             if (Array.isArray(plansData)) {
                 setPlans(plansData);
@@ -32,7 +32,7 @@ export default function useSubscriptionPlans() {
                 console.warn('API response is not an array:', plansData);
                 setPlans([]);
             }
-            
+
         } catch (err) {
             console.error('Error fetching subscription plans:', err);
             setError(err);
@@ -46,11 +46,11 @@ export default function useSubscriptionPlans() {
         fetchPlans();
     }, []);
 
-    return { 
-        plans, 
-        loading, 
-        error, 
-        refetch: fetchPlans 
+    return {
+        plans,
+        loading,
+        error,
+        refetch: fetchPlans
 
     };
 }

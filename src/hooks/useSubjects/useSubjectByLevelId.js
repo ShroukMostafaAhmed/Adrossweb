@@ -13,7 +13,7 @@ function useSubjectByLevelId() {
     setLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get(`/Subject/by-level/${levelId}`);
+      const res = await AxiosInstance.get(`/api/Subject/by-level/${levelId}`);
       //const res = await AxiosInstance.get(`api/Stages/{stageId}/${stageId}`);
 
       // نفترض الـ API يرجع statusCode = 0 للنجاح

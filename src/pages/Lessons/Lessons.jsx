@@ -31,13 +31,13 @@ function Lessons() {
 
   useEffect(() => {
     if (state?.id) {
-      getLessonBySubjectId(state.id); 
+      getLessonBySubjectId(state.id);
     }
   }, [state, getLessonBySubjectId]);
-
   const handleCardClick = (lesson) => {
-    navigate('/lesson_details', { state: { lessonId: lesson.id, title: lesson.name } });
+    navigate(`/lesson_details/${lesson.id}`, { state: { title: lesson.name } });
   };
+
 
   return (
     <>

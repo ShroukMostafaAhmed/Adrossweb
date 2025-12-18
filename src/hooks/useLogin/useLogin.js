@@ -8,7 +8,9 @@ function useLogin() {
   const loginAPI = async (data) => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.post("/Auth/Login", data);
+      const res = await AxiosInstance.post("/api/Auth/Login", data);
+
+
 
       if (res.data.message === "User does not exist!") {
         localStorage.removeItem("Token");

@@ -9,7 +9,7 @@ function useGetAllSkills() {
   const fetchSkills = async () => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.get("/Skills/GetAllSkills");
+      const res = await AxiosInstance.get("/api/Skills/GetAllSkills");
       setSkills(res.data);
     } catch (err) {
       setError(err);

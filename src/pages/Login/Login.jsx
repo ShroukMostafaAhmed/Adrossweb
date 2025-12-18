@@ -4,14 +4,14 @@ import AuthForm from "../../components/AuthForm/AuthForm.jsx";
 import { useNavigate } from "react-router-dom";
 import useLogin from "../../hooks/useLogin/useLogin.js";
 import Swal from "sweetalert2";
-import AuthBackground from "../../components/AuthBackground.jsx"; 
+import AuthBackground from "../../components/AuthBackground.jsx";
 
 function Login() {
   const { loginAPI } = useLogin();
   const navigate = useNavigate();
 
   const fields = [
-    { label: "رقم الهاتف", name: "PhoneNumber", type: "text", placeholder: "ادخل رقم الهاتف" },
+    { label: "البريد الالكتروني", name: "email", type: "text", placeholder: "ادخل البريد الالكتروني " },
     { label: "كلمة السر", name: "password", type: "password", placeholder: "ادخل كلمة السر" },
   ];
 

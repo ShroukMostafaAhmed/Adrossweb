@@ -9,10 +9,11 @@ function useGetLessonById() {
   const getLessonById = async (lessonId) => {
     setLoading(true);
     try {
-      const res = await AxiosInstance.get(`/Lessons/${lessonId}`);
+      const res = await AxiosInstance.get(`/api/Lessons/${lessonId}`);
       setLesson(res.data.data);
     } catch (err) {
       setError(err);
+      console.error("Error fetching lesson:", err);
     } finally {
       setLoading(false);
     }

@@ -5,6 +5,7 @@ import BannerCard from "../../components/Cards/BannerCard.jsx";
 import DetailsCard from "../../components/Cards/DetailsCard.jsx";
 import Card from "../../components/Cards/Card.jsx";
 import VideoCard from "../../components/Cards/VideoCard.jsx";
+import useGetLessonById from "../../hooks/useLessons/useGetLessonById.js";
 
 function LessonDetails() {
     const location = useLocation();
@@ -40,7 +41,7 @@ function LessonDetails() {
             <BannerCard
                 imageSrc="/stage1.png"
                 imageAlt="Stage Banner"
-                title={state.title} 
+                title={state.title}
             />
 
             <div dir="rtl">
