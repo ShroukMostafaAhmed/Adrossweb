@@ -45,7 +45,7 @@ function StageDetails() {
       state: {
         id: level.id,
         title: state.title,
-        text: level.name,
+        text: level.title,
         imagePath: level.imagePath,
       },
     });

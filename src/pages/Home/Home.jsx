@@ -57,21 +57,21 @@ function Home() {
       <div className="my-4 space-y-6 sm:space-y-10 px-6 sm:px-6 md:px-12 lg:px-20 xl:px-40 relative z-10">
 
         {/* ✅ المراحل التعليمية */}
-        <section className="container mx-auto px-4">
+        <div>
           <h2 className="text-xl sm:text-2xl font-bold text-black mb-4 mt-8 text-center sm:text-right">
-            المراحل التعليمية
+            ابدأ دروسك الأن
           </h2>
 
           <div>
-            {Array.isArray(data?.stages) && data.stages.length > 0 ? (
-              <StageCard stage={data.stages[0]} />
+            {Array.isArray(data?.levels) && data.levels.length > 0 ? (
+              <StageCard level={data.levels[0]} />
             ) : (
               <div className="text-gray-500">
                 لا توجد مراحل تعليمية متاحة حالياً.
               </div>
             )}
           </div>
-        </section>
+        </div>
 
         {/* ✅ التقويم الأسبوعي */}
         <section>

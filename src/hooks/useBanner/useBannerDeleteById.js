@@ -11,7 +11,7 @@ function UseBannerDeleteById() {
 
   const deleteBannerById = async (bannerId) => {
     setLoading(true);
-    await AxiosInstance.delete(`/Banners/delete/${bannerId}}`)
+    await AxiosInstance.delete(`api/Banners/delete/${bannerId}`)
       .then((res) => {
         if (res.data.statusCode === 200) {
           Swal.fire({

@@ -12,7 +12,7 @@ function useLessonBySubjectId() {
     setLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get(`/api/Lesson/by-subject/${subjectId}`);
+      const res = await AxiosInstance.get(`/api/Lessons/by-subject/${subjectId}`);
 
       // نفترض الـ API يرجع statusCode = 0 للنجاح
       if (res.data.statusCode === 200) {

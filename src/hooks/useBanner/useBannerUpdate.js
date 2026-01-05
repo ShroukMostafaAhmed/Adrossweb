@@ -10,7 +10,7 @@ function useBannerUpdate() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.put(`/Banners/update/${bannerId}`, data);
+      const res = await AxiosInstance.put(`api/Banners/update/${bannerId}`, data);
       if (
         res.data.statusCode === 200 ||
         res.data.message?.toLowerCase().includes("updated")

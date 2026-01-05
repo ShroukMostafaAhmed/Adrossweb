@@ -10,7 +10,7 @@ function useBannerViewAll() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get("/Banners");
+      const res = await AxiosInstance.get("api/Banners");
       if (res.data.statusCode === 200 || res.data.message === "Banner List") {
         setBanners(res.data.data);
       } else {

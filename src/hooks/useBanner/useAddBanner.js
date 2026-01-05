@@ -11,7 +11,7 @@ function useAddBanner() {
 
   const addBanner = async (data) => {
     setLoading(true);
-    await AxiosInstance.post("/banners/create", data)
+    await AxiosInstance.post("api/Banners/create", data)
       .then((res) => {
         console.log(res);
 

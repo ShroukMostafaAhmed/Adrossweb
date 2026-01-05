@@ -13,7 +13,7 @@ function useGetLevelsByStageId() {
     setLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get(`/api/Level/by-stage/${stageId}`);
+      const res = await AxiosInstance.get(`/api/Levels/by-stage/${stageId}`);
       //const res = await AxiosInstance.get(`api/Stages/{stageId}/${stageId}`);
 
       // نفترض الـ API يرجع statusCode = 0 للنجاح

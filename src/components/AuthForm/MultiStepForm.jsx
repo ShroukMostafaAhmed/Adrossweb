@@ -4,7 +4,6 @@ import InputField from "./InputField.jsx";
 import useRegister from "../../hooks/useRegister/useRegister.js";
 import "./styles.css";
 
-// نفس ستايل ال inputs للـ selects
 const selectClass =
   "w-full h-11 text-sm md:text-base bg-white text-gray-900 " +
   "border border-gray-300 rounded-lg px-3 py-2 " +
@@ -14,28 +13,7 @@ const selectClass =
 
 const ReqStar = () => <span className="text-red-500">*</span>;
 
-// يفضّل ضبطه من env مع Vite: VITE_API_BASE_URL
-const API_BASE = import.meta?.env?.VITE_API_BASE_URL || "";
-
-async function fetchJSON(url, { signal } = {}) {
-  const res = await fetch(url, { signal });
-  if (!res.ok) {
-    const text = await res.text().catch(() => "");
-    throw new Error(text || `HTTP ${res.status}`);
-  }
-  return res.json();
-}
-
-// محاولة للتطبيع لو أسماء الحقول مختلفة
-const normalizeStage = (s) => ({
-  id: s?.id ?? s?.stageId ?? s?.StageId ?? s?.ID,
-  label: s?.name ?? s?.label ?? s?.stageName ?? s?.Name ?? "",
-});
-
-const normalizeLevel = (l) => ({
-  id: l?.id ?? l?.levelId ?? l?.LevelId ?? l?.ID,
-  label: l?.name ?? l?.label ?? l?.levelName ?? l?.Name ?? "",
-});
+const API_BASE = import.meta?.env?.VITE_API_BASE_URL || "http://adros-mrashed.runasp.net";
 
 export default function RegisterForm() {
   const navigate = useNavigate();
@@ -44,16 +22,16 @@ export default function RegisterForm() {
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
-    PhoneNumber: "",
+    Email: "", // Changed from PhoneNumber to Email
     Password: "",
     ConfirmPassword: "",
-    StageId: "",   // المرحلة المختارة
-    LevelId: "",   // الصف/المستوى المختار
+    StageId: "",
+    LevelId: "",
   });
 
   const [error, setError] = useState("");
 
-  // بيانات المراحل/المستويات من الـ API
+  // State for stages and levels
   const [stages, setStages] = useState([]);
   const [levels, setLevels] = useState([]);
   const [stageLoading, setStageLoading] = useState(false);
@@ -61,65 +39,130 @@ export default function RegisterForm() {
   const [stageError, setStageError] = useState("");
   const [levelError, setLevelError] = useState("");
 
-  // كاش للمستويات لكل Stage لتقليل النداءات
+  // Cache for levels to reduce API calls
   const levelsCacheRef = useRef({});
-
-  // لإلغاء الطلب عند تغيير المرحلة سريعًا
   const levelAbortRef = useRef(null);
 
-  // تحميل المراحل عند الفتح
+  // Fetch stages on component mount
   useEffect(() => {
-    let aborter = new AbortController();
-    setStageLoading(true);
-    setStageError("");
-    fetchJSON(`${API_BASE}/api/Stages/all`, { signal: aborter.signal })
-      .then((data) => {
-        const rows = Array.isArray(data) ? data : data?.data || [];
-        const normalized = rows.map(normalizeStage).filter((x) => x.id && x.label);
-        setStages(normalized);
-      })
-      .catch((e) => setStageError("تعذر تحميل المراحل"))
-      .finally(() => setStageLoading(false));
-    return () => aborter.abort?.();
+    const fetchStages = async () => {
+      setStageLoading(true);
+      setStageError("");
+
+      try {
+        const response = await fetch(`${API_BASE}/api/Stages/all`);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch stages');
+        }
+
+        const result = await response.json();
+        console.log('Stages API response:', result);
+
+        const stagesData = result.data || result;
+
+        if (!Array.isArray(stagesData)) {
+          throw new Error('Invalid stages data format');
+        }
+
+        const normalizedStages = stagesData.map(stage => ({
+          id: stage.id,
+          label: stage.title || stage.name || 'Unknown Stage'
+        }));
+
+        console.log('Normalized stages:', normalizedStages);
+        setStages(normalizedStages);
+
+      } catch (err) {
+        console.error('Error fetching stages:', err);
+        setStageError("تعذر تحميل المراحل");
+      } finally {
+        setStageLoading(false);
+      }
+    };
+
+    fetchStages();
   }, []);
 
-  // تحميل المستويات عند اختيار مرحلة
+  // Fetch levels when stage is selected
   useEffect(() => {
     const stageId = formData.StageId;
-    setLevels([]);
-    setLevelError("");
-    setFormData((p) => ({ ...p, LevelId: "" }));
 
-    if (!stageId) return;
+    if (!stageId) {
+      setLevels([]);
+      setLevelError("");
+      setFormData(prev => ({ ...prev, LevelId: "" }));
+      return;
+    }
 
-    // لو متخزنة في الكاش
     if (levelsCacheRef.current[stageId]) {
       setLevels(levelsCacheRef.current[stageId]);
       return;
     }
 
-    // ألغِ الطلب السابق (لو موجود) وتجهّز واحد جديد
-    levelAbortRef.current?.abort?.();
-    const aborter = new AbortController();
-    levelAbortRef.current = aborter;
+    if (levelAbortRef.current) {
+      levelAbortRef.current.abort();
+    }
 
-    setLevelLoading(true);
-    fetchJSON(`${API_BASE}/api/Levels/by-stage/${encodeURIComponent(stageId)}`, {
-      signal: aborter.signal,
-    })
-      .then((data) => {
-        const rows = Array.isArray(data) ? data : data?.data || [];
-        const normalized = rows.map(normalizeLevel).filter((x) => x.id && x.label);
-        levelsCacheRef.current[stageId] = normalized;
-        setLevels(normalized);
-      })
-      .catch((e) => {
-        if (e.name !== "AbortError") setLevelError("تعذر تحميل الصفوف/المستويات");
-      })
-      .finally(() => setLevelLoading(false));
+    const abortController = new AbortController();
+    levelAbortRef.current = abortController;
 
-    return () => aborter.abort?.();
+    const fetchLevels = async () => {
+      setLevelLoading(true);
+      setLevelError("");
+      setLevels([]);
+
+      try {
+        const response = await fetch(
+          `${API_BASE}/api/Levels/by-stage/${encodeURIComponent(stageId)}`,
+          { signal: abortController.signal }
+        );
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch levels');
+        }
+
+        const result = await response.json();
+        console.log('Levels API response:', result);
+
+        const levelsData = result.data || result;
+
+        if (!Array.isArray(levelsData)) {
+          throw new Error('Invalid levels data format');
+        }
+
+        const normalizedLevels = levelsData.map(level => ({
+          id: level.id,
+          label: level.title || level.name || 'Unknown Level'
+        }));
+
+        console.log('Normalized levels:', normalizedLevels);
+
+        levelsCacheRef.current[stageId] = normalizedLevels;
+        setLevels(normalizedLevels);
+
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error('Error fetching levels:', err);
+          setLevelError("تعذر تحميل الصفوف/المستويات");
+        }
+      } finally {
+        setLevelLoading(false);
+      }
+    };
+
+    fetchLevels();
+
+    return () => {
+      abortController.abort();
+    };
   }, [formData.StageId]);
+
+  // Email validation function
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -127,17 +170,18 @@ export default function RegisterForm() {
     const {
       FirstName,
       LastName,
-      PhoneNumber,
+      Email,
       Password,
       ConfirmPassword,
       StageId,
       LevelId,
     } = formData;
 
+    // Validation
     if (
       !FirstName ||
       !LastName ||
-      !PhoneNumber ||
+      !Email ||
       !Password ||
       !ConfirmPassword ||
       !StageId ||
@@ -146,10 +190,18 @@ export default function RegisterForm() {
       setError("من فضلك املأ جميع الحقول المطلوبة");
       return;
     }
+
+    // Email validation
+    if (!isValidEmail(Email)) {
+      setError("يرجى إدخال بريد إلكتروني صحيح");
+      return;
+    }
+
     if (Password.length < 6) {
       setError("كلمة السر يجب أن تكون على الأقل 6 أحرف");
       return;
     }
+
     if (Password !== ConfirmPassword) {
       setError("كلمة السر وتأكيدها غير متطابقين");
       return;
@@ -157,15 +209,18 @@ export default function RegisterForm() {
 
     setError("");
 
+    // Prepare data for API
     const apiData = {
-      phoneNumber: PhoneNumber,
       firstName: FirstName,
       lastName: LastName,
+      email: Email, // Changed from phoneNumber to email
       password: Password,
       confirmPassword: ConfirmPassword,
-      levelId: LevelId, // المطلوب من الباك
-      // ملحوظة: لا نرسل StageId إذا الباك لا يحتاجه
+      levelId: LevelId,
+      stageId: StageId, // Added stageId as required by backend
     };
+
+    console.log('Submitting registration:', apiData);
 
     const response = await registerAPI(apiData);
 
@@ -237,20 +292,21 @@ export default function RegisterForm() {
                     setFormData({
                       ...formData,
                       StageId: e.target.value,
-                      LevelId: "", // تصفير المستوى عند تغيير المرحلة
+                      LevelId: "",
                     })
                   }
                   className={selectClass}
+                  disabled={stageLoading}
                 >
                   <option value="">
                     {stageLoading ? "— جاري التحميل… —" : "— اختر المرحلة —"}
                   </option>
-                  {stageError && <option value="">{stageError}</option>}
+                  {stageError && <option value="" disabled>{stageError}</option>}
                   {!stageLoading &&
                     !stageError &&
-                    stages.map((s) => (
-                      <option key={s.id} value={s.id}>
-                        {s.label}
+                    stages.map((stage) => (
+                      <option key={stage.id} value={stage.id}>
+                        {stage.label}
                       </option>
                     ))}
                 </select>
@@ -268,38 +324,37 @@ export default function RegisterForm() {
                     setFormData({ ...formData, LevelId: e.target.value })
                   }
                   disabled={!formData.StageId || levelLoading}
-                  className={`${selectClass} ${
-                    !formData.StageId || levelLoading ? "opacity-60" : ""
-                  }`}
+                  className={`${selectClass} ${!formData.StageId || levelLoading ? "opacity-60" : ""
+                    }`}
                 >
                   <option value="">
                     {!formData.StageId
                       ? "اختر المرحلة أولاً"
                       : levelLoading
-                      ? "— جاري التحميل… —"
-                      : "— اختر الصف / المستوى —"}
+                        ? "— جاري التحميل… —"
+                        : "— اختر الصف / المستوى —"}
                   </option>
-                  {levelError && <option value="">{levelError}</option>}
+                  {levelError && <option value="" disabled>{levelError}</option>}
                   {!levelLoading &&
                     !levelError &&
-                    levels.map((l) => (
-                      <option key={l.id} value={l.id}>
-                        {l.label}
+                    levels.map((level) => (
+                      <option key={level.id} value={level.id}>
+                        {level.label}
                       </option>
                     ))}
                 </select>
               </div>
             </div>
 
-            {/* رقم الهاتف */}
+            {/* البريد الإلكتروني - بدلاً من رقم الهاتف */}
             <InputField
-              label="رقم الهاتف"
-              type="tel"
-              name="PhoneNumber"
-              placeholder="ادخل رقم الهاتف"
-              value={formData.PhoneNumber}
+              label="البريد الإلكتروني"
+              type="email"
+              name="Email"
+              placeholder="example@domain.com"
+              value={formData.Email}
               onChange={(e) =>
-                setFormData({ ...formData, PhoneNumber: e.target.value })
+                setFormData({ ...formData, Email: e.target.value })
               }
             />
 
@@ -339,11 +394,10 @@ export default function RegisterForm() {
             <button
               type="submit"
               disabled={loading || stageLoading}
-              className={`px-4 py-2 w-full text-white rounded-lg cursor-pointer ${
-                loading || stageLoading
-                  ? "bg-gray-400"
-                  : "bg-blue-700 hover:bg-blue-800 bold"
-              }`}
+              className={`px-4 py-2 w-full text-white rounded-lg cursor-pointer ${loading || stageLoading
+                ? "bg-gray-400"
+                : "bg-blue-700 hover:bg-blue-800 bold"
+                }`}
             >
               {loading ? "جارٍ التسجيل..." : "إنشاء حساب"}
             </button>

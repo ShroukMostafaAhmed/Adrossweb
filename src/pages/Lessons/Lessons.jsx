@@ -62,11 +62,11 @@ function Lessons() {
               key={lesson.id}
               id={lesson.id}
               color="blue"
-              text={lesson.name}
-              number={<img src={lesson.imageUrl || "/lesson.png"} alt={lesson.name} className="w-8 h-8" />}
+              text={lesson.title}
+              number={<img src="/english.png" alt={lesson.title} className="w-12 h-12" />}
               onClick={() => handleCardClick(lesson)}
-              href="/lesson_details"
             />
+
           ))}
         </div>
       </div>
