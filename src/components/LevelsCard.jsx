@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 
-function LevelsCard({ id, title, image, description }) {
+function LevelsCard({ id, title, imagePath }) {
     const navigate = useNavigate();
 
     return (
@@ -10,7 +10,7 @@ function LevelsCard({ id, title, image, description }) {
         >
             {/* صورة الخلفية */}
             <img
-                src={image}
+                src={imagePath}
                 alt={title}
                 className="w-3xl h-70 object-cover rounded-2xl transition-transform duration-300 hover:scale-105"
             />
@@ -18,10 +18,10 @@ function LevelsCard({ id, title, image, description }) {
             {/* النصوص والزر - جهة اليمين */}
             <div className="absolute inset-0 flex flex-col justify-center items-start p-4 text-left bg-gradient-to-l from-white/70 via-white/30 to-transparent ">
                 <h3 className="text-white text-3xl font-bold mb-15">{title}</h3>
-                <p className="text-white text-lg mb-3 max-w-[70%]">{description}</p>
+
                 <button
                     onClick={(e) => {
-                        e.stopPropagation(); // منع التنقل من العنصر الرئيسي
+                        e.stopPropagation();
                         navigate('/level_Details/' + id, {
                             state: { id, title }
                         });

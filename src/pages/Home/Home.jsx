@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Slider from "../../components/Slider/Slider.jsx";
-import StageCard from "../../components/Cards/StageCard.jsx";
+import LevelsCard from "../../components/LevelsCard.jsx";
 import WeeklyCalendar from "../../components/Calendar/WeeklyCalendar.jsx";
 import VideoCard from "../../components/Cards/VideoCard.jsx";
 import useGetHomeData from '../../hooks/useHome/useGetHomeData.js';
@@ -61,16 +61,21 @@ function Home() {
           <h2 className="text-xl sm:text-2xl font-bold text-black mb-4 mt-8 text-center sm:text-right">
             ابدأ دروسك الأن
           </h2>
+          {data?.levels ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <LevelsCard
+                key={data.levels.id}
+                id={data.levels.id}
+                title={data.levels.title}
+                imagePath={data.levels.imagePath}
+              />
+            </div>
+          ) : (
+            <div className="text-gray-500">لا توجد مستويات تعليمية حالياً</div>
+          )}
 
-          <div>
-            {Array.isArray(data?.levels) && data.levels.length > 0 ? (
-              <StageCard level={data.levels[0]} />
-            ) : (
-              <div className="text-gray-500">
-                لا توجد مراحل تعليمية متاحة حالياً.
-              </div>
-            )}
-          </div>
+
+
         </div>
 
         {/* ✅ التقويم الأسبوعي */}
