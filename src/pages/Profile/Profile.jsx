@@ -26,34 +26,32 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState("");
   const objectUrlRef = useRef(null);
 
-  // 🔎 دعم مفاتيح lower/Upper
+
   const api = data || {};
   const firstName = api.firstName ?? api.FirstName ?? "";
-  const lastName  = api.lastName  ?? api.LastName  ?? "";
-  const name      = api.name      ?? "";
-  const level     = api.level     ?? api.Level     ?? "غير محدد";
-  const views     = api.viewsCount     ?? api.ViewsCount     ?? 0;
+  const lastName = api.lastName ?? api.LastName ?? "";
+  const name = api.name ?? "";
+  const level = api.level ?? api.Level ?? "غير محدد";
+  const views = api.viewsCount ?? api.ViewsCount ?? 0;
   const downloads = api.downloadsCount ?? api.DownloadsCount ?? 0;
-  const totalStudy= api.totalStudyTime ?? api.TotalStudyTime ?? "00:00:00";
-  const dailyAch  = api.dailyAchievements ?? api.DailyAchievements ?? [];
-  const phone     = api.phoneNumber ?? api.PhoneNumber ?? "";
-  
-const displayName =
-  [firstName, lastName]
-    .map(s => (s ?? '').trim())
-    .filter(Boolean)
-    .join('\u00A0') ||     // NBSP
-  (name?.trim() || "اسم الطالب");
+  const totalStudy = api.totalStudyTime ?? api.TotalStudyTime ?? "00:00:00";
+  const dailyAch = api.dailyAchievements ?? api.DailyAchievements ?? [];
+  const phone = api.phoneNumber ?? api.PhoneNumber ?? "";
+
+  const displayName =
+    [firstName, lastName]
+      .map(s => (s ?? '').trim())
+      .filter(Boolean)
+      .join('\u00A0') ||     // NBSP
+    (name?.trim() || "اسم الطالب");
 
   const serverImagePath = (api.imagePath ?? "").trim();
 
-  // مفتاح ثابت للصورة لكل طالب
   const photoKey = useMemo(() => {
     const idPart = (phone && String(phone).trim()) || displayName || "me";
     return `profilePhoto:${idPart}`;
   }, [phone, displayName]);
 
-  // تحديد مصدر الصورة (محلي/سيرفر/افتراضي) — بدون أي return قبل هذا الـ effect
   useEffect(() => {
     let cancelled = false;
     const setSrc = (src) => { if (!cancelled) setProfileImage(src); };
@@ -126,18 +124,15 @@ const displayName =
 
     setIsUpdatingPhoto(true);
     try {
-      // Preview مؤقت
       const tempUrl = URL.createObjectURL(file);
       if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
       objectUrlRef.current = tempUrl;
       setProfileImage(tempUrl);
 
-      // ضغط + تخزين + تفعيل تفضيل المحلية
       const compressed = await compressImageFile(file, { maxSide: 700, type: "image/webp", quality: 0.9 });
       await saveProfilePhoto(photoKey, compressed);
       await setPreferLocal(photoKey, true);
 
-      // اعرض من الـ blob المخزّن
       if (objectUrlRef.current) URL.revokeObjectURL(objectUrlRef.current);
       const finalUrl = URL.createObjectURL(compressed);
       objectUrlRef.current = finalUrl;
@@ -152,9 +147,8 @@ const displayName =
     }
   };
 
-  // ✅ بعد ما استدعينا كل الـ hooks فوق، دلوقتي نقدر نعمل returns safely
   if (loading) return <p className="text-center mt-10">جاري تحميل البيانات...</p>;
-  if (error)   return <p className="text-center mt-10 text-red-500">{error}</p>;
+  if (error) return <p className="text-center mt-10 text-red-500">{error}</p>;
 
   const lessons = [
     {

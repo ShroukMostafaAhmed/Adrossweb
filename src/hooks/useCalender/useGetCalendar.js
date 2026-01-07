@@ -11,7 +11,7 @@ function useGetCalendar() {
     setError(null);
     try {
       // Use the correct endpoint from API documentation
-      const res = await AxiosInstance.get("/api/Calenders");
+      const res = await AxiosInstance.get("/api/StudentCalenders");
       if (res.status === 200) {
         // The API returns an array directly, not wrapped in a data property
         const data = res.data;

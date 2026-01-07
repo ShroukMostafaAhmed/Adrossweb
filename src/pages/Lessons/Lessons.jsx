@@ -50,7 +50,7 @@ function Lessons() {
         />
       </div>
 
-      <div className="flex flex-col gap-4 px-6">
+      <div className="flex flex-col gap-4 px-6 pr-35">
         <h2 className="text-2xl font-bold py-4">اختر الدرس</h2>
 
         {loading && <p>جاري تحميل الدروس...</p>}

@@ -19,6 +19,7 @@ import Calendar from "./pages/Calendar/Calendar.jsx";
 import Exam from "./pages/Exam/Exam.jsx";
 import ExamReviews from "./pages/Exam/ExamReviews.jsx";
 import ExamResults from "./pages/Exam/ExamResults.jsx";
+import Units from './pages/Units/Units.jsx';
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("Token"));
@@ -47,6 +48,7 @@ function App() {
         { path: 'settings', element: <Settings /> },
         { path: 'profile', element: <Profile /> },
         { path: 'calendar', element: <Calendar /> },
+        { path: 'Units', element: <Units /> },
         {
           path: 'exam',
           children: [

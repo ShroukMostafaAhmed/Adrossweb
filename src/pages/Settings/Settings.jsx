@@ -6,8 +6,7 @@ export default function ModernSubscriptionPlans() {
     const [selectedPlanId, setSelectedPlanId] = useState(null);
     const [pendingSelection, setPendingSelection] = useState(null);
     const [showConfirm, setShowConfirm] = useState(false);
-    
-    // Use the API hook
+
     const { plans: apiPlans, loading, error } = useSubscriptionPlans();
     const [plans, setPlans] = useState([]);
 
@@ -16,10 +15,9 @@ export default function ModernSubscriptionPlans() {
         if (savedPlan) setSelectedPlanId(savedPlan);
     }, []);
 
-    // Process API data and merge with UI styling
     useEffect(() => {
         if (apiPlans && apiPlans.length > 0) {
-            // Define UI styling for different plan types
+
             const planStyles = {
                 basic: {
                     icon: <Star className="w-8 h-8" />,
@@ -46,7 +44,7 @@ export default function ModernSubscriptionPlans() {
                 // Determine plan type based on API data or index
                 const planTypes = ['basic', 'premium', 'ultimate'];
                 const planType = apiPlan.type?.toLowerCase() || planTypes[index] || 'basic';
-                
+
                 return {
                     id: apiPlan.id?.toString() || planTypes[index],
                     label: apiPlan.name || apiPlan.title || `الباقة ${index + 1}`,
@@ -72,7 +70,7 @@ export default function ModernSubscriptionPlans() {
                     borderGradient: "from-amber-200 to-orange-300",
                     features: [
                         "تشمل جميع المراحل الدراسية",
-                        "دروس تعليمية شاملة", 
+                        "دروس تعليمية شاملة",
                         "فيديوهات تعليمية شاملة",
                         "اختبارات متطورة لتقييم الفهم"
                     ],
@@ -89,7 +87,7 @@ export default function ModernSubscriptionPlans() {
                     features: [
                         "جميع ميزات الباقة الأساسية",
                         "دروس تعليمية شاملة",
-                        "فيديوهات تعليمية شاملة", 
+                        "فيديوهات تعليمية شاملة",
                         "اختبارات متطورة لتقييم الفهم",
                         "حل الأسئلة والواجبات"
                     ],
@@ -107,7 +105,7 @@ export default function ModernSubscriptionPlans() {
                         "جميع ميزات الباقة المميزة",
                         "دروس تعليمية شاملة",
                         "فيديوهات تعليمية شاملة",
-                        "اختبارات متطورة لتقييم الفهم", 
+                        "اختبارات متطورة لتقييم الفهم",
                         "حل الأسئلة والواجبات",
                         "مساعد ذكي متقدم",
                         "دعم فني متقدم 24/7"
@@ -157,8 +155,8 @@ export default function ModernSubscriptionPlans() {
                     </div>
                     <h2 className="text-2xl font-bold text-gray-700 mb-2">حدث خطأ في التحميل</h2>
                     <p className="text-gray-500 mb-6">لم نتمكن من تحميل الباقات. يرجى المحاولة مرة أخرى.</p>
-                    <button 
-                        onClick={() => window.location.reload()} 
+                    <button
+                        onClick={() => window.location.reload()}
                         className="px-6 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors"
                     >
                         إعادة المحاولة
@@ -227,7 +225,7 @@ export default function ModernSubscriptionPlans() {
                                 `}
                             >
                                 <span className="relative z-10 flex items-center justify-center gap-2">
-                                    {selectedPlanId === plan.id && <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />} 
+                                    {selectedPlanId === plan.id && <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5 text-white" />}
                                     {selectedPlanId === plan.id ? 'الباقة المختارة' : 'اشترك الآن'}
                                 </span>
                                 <div className="absolute inset-0 bg-white/20 transform translate-x-full group-hover/btn:-translate-x-full transition-transform duration-500"></div>

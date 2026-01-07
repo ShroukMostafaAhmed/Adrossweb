@@ -42,7 +42,7 @@ function LevelDetails() {
       text: sub.title
     };
     setState(newState);
-    navigate('/lessons', { state: newState });
+    navigate('/Units', { state: newState });
   };
 
   useEffect(() => {
@@ -57,7 +57,7 @@ function LevelDetails() {
   return (
     <>
       <Breadcrumb items={items} />
-    <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
+      <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
         <BannerCard
           imageSrc="/stage1.png"
           imageAlt="Stage Banner"
@@ -77,7 +77,7 @@ function LevelDetails() {
             <Card
               key={sub.id}
               id={sub.id}
-              href={"/lessons"}
+              href={"/Units"}
               color="blue"
               text={sub.title}
               number={<img src="/english.png" alt={sub.name} className="w-12 h-12" />}
