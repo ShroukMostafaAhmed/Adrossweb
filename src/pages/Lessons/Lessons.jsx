@@ -1,43 +1,37 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Breadcrumb from "../../components/main/BreadCrumb.jsx";
 import BannerCard from "../../components/Cards/BannerCard.jsx";
 import Card from "../../components/Cards/Card.jsx";
-import useLessonBySubjectId from '../../hooks/useLessons/useGetLessonBySubjectId.jsx';
+import useGetLessonsByUnitId from '../../hooks/useLessons/useGetLessonsByUnitId';
 
 function Lessons() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { loading, levels: lessons, error, getLessonBySubjectId } = useLessonBySubjectId();
+  const { loading, lessons, error, getLessonsByUnitId } = useGetLessonsByUnitId();
 
-  const [state] = useState(() => {
+  const state = useMemo(() => {
     const savedState = localStorage.getItem("lessonState");
-    return location.state || (savedState ? JSON.parse(savedState) : {});
-  });
+    const initialState = location.state || (savedState ? JSON.parse(savedState) : {});
+    localStorage.setItem("lessonState", JSON.stringify(initialState));
+    return initialState;
+  }, [location.state]);
 
-  const [items, setItems] = useState([]);
-
-  useEffect(() => {
-    if (state) {
-      localStorage.setItem("lessonState", JSON.stringify(state));
-      setItems([
-        { label: "الرئيسية", href: "/" },
-        { label: state.title || "المرحلة", href: "/stage_details", state: { title: state.title } },
-        { label: state.subtitle || "المستوى", href: "/level_details/" + state.levelId, state },
-        { label: state.text || "المادة" }
-      ]);
-    }
-  }, [state]);
+  const items = [
+    { label: "الرئيسية", href: "/" },
+    { label: state.title || "المرحلة", href: "/stage_details", state: { title: state.title } },
+    { label: state.subtitle || "المستوى", href: "/level_details/" + state.levelId, state },
+    { label: state.text || "المادة" }
+  ];
 
   useEffect(() => {
-    if (state?.id) {
-      getLessonBySubjectId(state.id);
-    }
-  }, [state, getLessonBySubjectId]);
+    if (!state?.id) return;
+    getLessonsByUnitId(state.id);
+  }, [state?.id, getLessonsByUnitId]);
+
   const handleCardClick = (lesson) => {
-    navigate(`/lesson_details/${lesson.id}`, { state: { title: lesson.name } });
+    navigate(`/lesson_details/${lesson.id}`, { state: { title: lesson.title } });
   };
-
 
   return (
     <>
@@ -56,8 +50,8 @@ function Lessons() {
         {loading && <p>جاري تحميل الدروس...</p>}
         {error && <p className="text-red-600">⚠️ {error}</p>}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10">
-          {(lessons || []).map((lesson) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10 mx-auto">
+          {lessons.map((lesson) => (
             <Card
               key={lesson.id}
               id={lesson.id}
@@ -66,7 +60,6 @@ function Lessons() {
               number={<img src="/english.png" alt={lesson.title} className="w-12 h-12" />}
               onClick={() => handleCardClick(lesson)}
             />
-
           ))}
         </div>
       </div>

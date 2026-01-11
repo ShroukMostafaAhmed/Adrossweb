@@ -43,12 +43,15 @@ function App() {
         { path: 'stage_details/:id', element: <StageDetails /> },
         { path: 'level_details/:id', element: <LevelDetails /> },
         { path: 'lessons', element: <Lessons /> },
+        { path: 'lessons/:id', element: <Lessons /> },
         { path: 'lesson_details/:id', element: <LessonDetails /> },
         { path: 'video_details', element: <VideoDetails /> },
         { path: 'settings', element: <Settings /> },
         { path: 'profile', element: <Profile /> },
         { path: 'calendar', element: <Calendar /> },
-        { path: 'Units', element: <Units /> },
+        { path: 'units', element: <Units /> },
+        { path: 'units/:id', element: <Units /> },
+
         {
           path: 'exam',
           children: [

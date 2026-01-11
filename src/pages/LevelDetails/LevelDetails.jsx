@@ -42,7 +42,7 @@ function LevelDetails() {
       text: sub.title
     };
     setState(newState);
-    navigate('/Units', { state: newState });
+    navigate(`/units/${sub.id}`, { state: newState });
   };
 
   useEffect(() => {
@@ -77,7 +77,7 @@ function LevelDetails() {
             <Card
               key={sub.id}
               id={sub.id}
-              href={"/Units"}
+              href={`/Units/${sub.id}`}
               color="blue"
               text={sub.title}
               number={<img src="/english.png" alt={sub.name} className="w-12 h-12" />}

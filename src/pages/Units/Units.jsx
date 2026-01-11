@@ -1,94 +1,122 @@
-import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Breadcrumb from "../../components/main/BreadCrumb.jsx";
 import BannerCard from "../../components/Cards/BannerCard.jsx";
 import Card from "../../components/Cards/Card.jsx";
-import useUnitsBySubjectId from '../../hooks/useUnits/useGetUnitsBySubjectId.jsx';
+import useGetUnitsBySubjectId from "../../hooks/useUnits/useGetUnitsBySubjectId.jsx";
 
 function Units() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { loading, units, error, getUnitsBySubjectId } = useUnitsBySubjectId();
+    const { id } = useParams(); // subjectId من الـ URL
 
-    const [state] = useState(() => {
+    const { loading, units, error, getUnitsBySubjectId } =
+        useGetUnitsBySubjectId();
+
+    const [state, setState] = useState(() => {
         const savedState = localStorage.getItem("unitState");
         return location.state || (savedState ? JSON.parse(savedState) : {});
     });
 
     const [items, setItems] = useState([]);
 
+    // Breadcrumb + حفظ state
     useEffect(() => {
-        if (state) {
-            localStorage.setItem("unitState", JSON.stringify(state));
-            setItems([
-                { label: "الرئيسية", href: "/" },
-                { label: state.stageTitle || "المرحلة", href: "/stage_details", state: { title: state.stageTitle } },
-                { label: state.levelTitle || "المستوى", href: "/level_details/" + state.levelId, state },
-                { label: state.subjectTitle || "المادة" }
-            ]);
-        }
-    }, [state]);
+        const finalState = {
+            ...state,
+            subjectId: id || state?.subjectId,
+        };
 
+        setState(finalState);
+        localStorage.setItem("unitState", JSON.stringify(finalState));
+
+        setItems([
+            { label: "الرئيسية", href: "/" },
+            {
+                label: finalState.stageTitle || "المرحلة",
+                href: "/stage_details",
+                state: { title: finalState.stageTitle },
+            },
+            {
+                label: finalState.levelTitle || "المستوى",
+                href: `/level_details/${finalState.levelId}`,
+                state: finalState,
+            },
+            { label: finalState.subjectTitle || "المادة" },
+        ]);
+    }, [id]);
+
+    // جلب الوحدات حسب subjectId
     useEffect(() => {
-        if (state?.subjectId) {
-            getUnitsBySubjectId(state.subjectId);
+        const subjectId = id || state?.subjectId;
+        if (subjectId) {
+            getUnitsBySubjectId(subjectId);
         }
-    }, [state, getUnitsBySubjectId]);
+    }, [id, state?.subjectId, getUnitsBySubjectId]);
 
+    // الانتقال لصفحة الدروس
     const handleCardClick = (unit) => {
-        navigate(`/unit/${unit.id}`, {
+        navigate(`/lessons/${unit.id}`, {
             state: {
                 ...state,
+                unitId: unit.id,
                 unitTitle: unit.title,
-                unitId: unit.id
-            }
+            },
         });
     };
 
     return (
         <>
             <Breadcrumb items={items} />
+
             <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
                 <BannerCard
                     imageSrc="/stage1.png"
-                    imageAlt="Stage Banner"
+                    imageAlt="Subject Banner"
                     title={state.subjectTitle || "الوحدات الدراسية"}
                 />
             </div>
 
             <div className="flex flex-col gap-4 px-6 pr-35">
-                <div className="flex flex-row justify-start items-center gap-6">
-
-                    <h2 className="text-2xl font-bold py-4">اختر الوحدة</h2>
-                </div>
+                <h2 className="text-2xl font-bold py-4">اختر الوحدة</h2>
 
                 {loading && (
-                    <div className="flex justify-center items-center py-10">
-                        <p className="text-xl">جاري تحميل الوحدات...</p>
+                    <div className="text-center py-10 text-xl">
+                        جاري تحميل الوحدات...
                     </div>
                 )}
 
                 {error && (
-                    <div className="text-red-600 text-center py-4">
-                        <p className="text-xl">⚠️ {error}</p>
+                    <div className="text-center py-10 text-red-600 text-xl">
+                        ⚠️ {error}
                     </div>
                 )}
 
-                {!loading && !error && units && units.length === 0 && (
-                    <div className="text-center py-10">
-                        <p className="text-xl text-gray-600">لا توجد وحدات متاحة لهذه المادة حالياً</p>
+                {!loading && !error && units.length === 0 && (
+                    <div className="text-center py-10 text-gray-600 text-xl">
+                        لا توجد وحدات متاحة لهذه المادة حالياً
                     </div>
                 )}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10">
-                    {(units || []).map((unit) => (
+                    {units.map((unit) => (
                         <Card
                             key={unit.id}
                             id={unit.id}
                             color="blue"
                             text={unit.title}
-                            number={<img src="/unit-icon.png" alt={unit.title} className="w-12 h-12" />}
-                            description={unit.description ? `${unit.description.substring(0, 50)}...` : ''}
+                            number={
+                                <img
+                                    src="/unit-icon.png"
+                                    alt={unit.title}
+                                    className="w-12 h-12"
+                                />
+                            }
+                            description={
+                                unit.description
+                                    ? `${unit.description.slice(0, 50)}...`
+                                    : "لا يوجد وصف"
+                            }
                             onClick={() => handleCardClick(unit)}
                         />
                     ))}
