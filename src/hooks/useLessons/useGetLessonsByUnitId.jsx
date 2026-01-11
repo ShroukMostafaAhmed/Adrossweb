@@ -3,6 +3,7 @@ import { useState, useCallback } from "react";
 import AxiosInstance from "../../utils/AxiosInstance.jsx";
 
 function useGetLessonsByUnitId() {
+
     const [loading, setLoading] = useState(false);
     const [lessons, setLessons] = useState([]);
     const [error, setError] = useState(null);
@@ -19,10 +20,12 @@ function useGetLessonsByUnitId() {
             );
 
             if (res.data.statusCode === 200) {
-                setLessons(res.data.data || []);
+                const data = res.data.data;
+                setLessons(Array.isArray(data.lessons) ? data.lessons : []);
             } else {
                 throw new Error(res.data.message || "فشل في جلب الدروس");
             }
+
         } catch (err) {
             setError(err.message || "حدث خطأ أثناء جلب الدروس");
             setLessons([]);

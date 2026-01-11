@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/main/BreadCrumb.jsx";
 import BannerCard from "../../components/Cards/BannerCard.jsx";
 import Card from "../../components/Cards/Card.jsx";
-import useGetLessonsByUnitId from '../../hooks/useLessons/useGetLessonsByUnitId';
+import DetailsCard from "../../components/Cards/DetailsCard.jsx";
+import useGetLessonsByUnitId from "../../hooks/useLessons/useGetLessonsByUnitId";
 
 function Lessons() {
   const location = useLocation();
@@ -19,45 +20,76 @@ function Lessons() {
 
   const items = [
     { label: "الرئيسية", href: "/" },
-    { label: state.title || "المرحلة", href: "/stage_details", state: { title: state.title } },
-    { label: state.subtitle || "المستوى", href: "/level_details/" + state.levelId, state },
-    { label: state.text || "المادة" }
+    { label: state.stageTitle || "المرحلة", href: "/stage_details", state: { title: state.stageTitle } },
+    { label: state.levelTitle || "المستوى", href: `/level_details/${state.levelId}`, state },
+    { label: state.subjectTitle || "المادة", href: `/units/${state.subjectId}`, state },
+    { label: state.unitTitle || "الوحدة" }
   ];
 
   useEffect(() => {
-    if (!state?.id) return;
-    getLessonsByUnitId(state.id);
-  }, [state?.id, getLessonsByUnitId]);
+    if (!state?.unitId) return;
+    getLessonsByUnitId(state.unitId);
+  }, [state?.unitId, getLessonsByUnitId]);
 
   const handleCardClick = (lesson) => {
     navigate(`/lesson_details/${lesson.id}`, { state: { title: lesson.title } });
   };
 
+  // Extract unit info from lessons response
+  const unitTitle = lessons.length > 0 ? state.unitTitle : null;
+  const unitDescription = state.unitDescription || "هذا الوصف للاختبار";
+
   return (
     <>
       <Breadcrumb items={items} />
+
+      {/* Banner */}
       <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
         <BannerCard
           imageSrc="/stage1.png"
           imageAlt="Stage Banner"
-          title={state.title}
+          title={state.unitTitle || "الوحدة"}
         />
       </div>
 
-      <div className="flex flex-col gap-4 px-6 pr-35">
-        <h2 className="text-2xl font-bold py-4">اختر الدرس</h2>
+      {/* Unit Details Section */}
+      <div className="max-w-6xl mx-35 mb-10 px-6">
+        {!loading && !error && (
 
-        {loading && <p>جاري تحميل الدروس...</p>}
-        {error && <p className="text-red-600">⚠️ {error}</p>}
+          <div>
+            <p className="text-gray-700  mb-4 leading-relaxed">
+              <span className="font-bold text-2xl  text-gray-800">هذه الوحدة تتحدث عن:</span> <br />
+              <div className=" pt-5 text-xl">{unitDescription}</div>
+            </p>
+          </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10 mx-auto">
+        )}
+        <br />
+
+        <h2 className="text-2xl font-bold mb-6">اختر الدرس</h2>
+
+        {loading && (
+          <div className="text-center py-10 text-xl">جاري تحميل الدروس...</div>
+        )}
+
+        {error && (
+          <div className="text-center py-10 text-red-600 text-xl">⚠️ {error}</div>
+        )}
+
+        {!loading && !error && lessons.length === 0 && (
+          <div className="text-center py-10 text-gray-600 text-xl">
+            لا توجد دروس متاحة لهذه الوحدة حالياً
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {lessons.map((lesson) => (
             <Card
               key={lesson.id}
               id={lesson.id}
               color="blue"
               text={lesson.title}
-              number={<img src="/english.png" alt={lesson.title} className="w-12 h-12" />}
+              number={<img src="/logo.png" alt={lesson.title} className="w-12 h-12" />}
               onClick={() => handleCardClick(lesson)}
             />
           ))}

@@ -80,7 +80,7 @@ function LevelDetails() {
               href={`/Units/${sub.id}`}
               color="blue"
               text={sub.title}
-              number={<img src="/english.png" alt={sub.name} className="w-12 h-12" />}
+              number={<img src="/logo.png" alt={sub.name} className="w-12 h-12" />}
               onClick={() => handleCardClick(sub)}
             />
           ))}

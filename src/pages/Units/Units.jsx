@@ -8,7 +8,7 @@ import useGetUnitsBySubjectId from "../../hooks/useUnits/useGetUnitsBySubjectId.
 function Units() {
     const location = useLocation();
     const navigate = useNavigate();
-    const { id } = useParams(); // subjectId من الـ URL
+    const { id } = useParams();
 
     const { loading, units, error, getUnitsBySubjectId } =
         useGetUnitsBySubjectId();
@@ -20,7 +20,6 @@ function Units() {
 
     const [items, setItems] = useState([]);
 
-    // Breadcrumb + حفظ state
     useEffect(() => {
         const finalState = {
             ...state,
@@ -107,7 +106,7 @@ function Units() {
                             text={unit.title}
                             number={
                                 <img
-                                    src="/unit-icon.png"
+                                    src="/logo.png"
                                     alt={unit.title}
                                     className="w-12 h-12"
                                 />
