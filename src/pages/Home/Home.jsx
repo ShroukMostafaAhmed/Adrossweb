@@ -22,7 +22,6 @@ function Home() {
     }
   }, [data]);
 
-  // ✅ ترتيب البانرز حسب order
   const sortedBanners = Array.isArray(data?.banners)
     ? [...data.banners].sort((a, b) => a.order - b.order)
     : [];
@@ -42,21 +41,17 @@ function Home() {
   return (
     <div dir="rtl" className="overflow-x-hidden">
 
-      {/* ✅ خلفيات و عناصر جانبية */}
       <div className="hidden sm:block">
         <BackgroundShapes />
         <SideImages />
       </div>
 
-      {/* ✅ البانرز */}
       <div className="my-6 pb-8 relative z-10 w-full">
         <Slider products={sortedBanners} />
       </div>
 
-      {/* ✅ المحتوى الرئيسي */}
       <div className="my-4 space-y-6 sm:space-y-10 px-6 sm:px-6 md:px-12 lg:px-20 xl:px-40 relative z-10">
 
-        {/* ✅ المراحل التعليمية */}
         <div>
           <h2 className="text-xl sm:text-2xl font-bold text-black mb-4 mt-8 text-center sm:text-right">
             ابدأ دروسك الأن
@@ -78,7 +73,6 @@ function Home() {
 
         </div>
 
-        {/* ✅ التقويم الأسبوعي */}
         <section>
           <h2 className="text-xl sm:text-2xl font-bold text-black mb-4 mt-12 sm:mt-20 text-center sm:text-right pb-5">
             التقويم الأسبوعي
@@ -89,7 +83,7 @@ function Home() {
           />
         </section>
 
-        {/* ✅ المهارات */}
+  
         <section>
           <h2 className="text-xl sm:text-2xl font-bold text-black mb-4 mt-12 sm:mt-20 text-center sm:text-right">
             المهارات المتنوعة

@@ -15,8 +15,6 @@ function useSubjectByLevelId() {
     try {
       const res = await AxiosInstance.get(`/api/Subject/GetSubjectsByLevel/${levelId}`);
 
-
-      // نفترض الـ API يرجع statusCode = 0 للنجاح
       if (res.data.statusCode === 200) {
         setLevels(res.data.data || []);
       } else {

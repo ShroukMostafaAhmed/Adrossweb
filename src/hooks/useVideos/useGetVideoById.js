@@ -10,15 +10,17 @@ function useGetVideoById() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get(`/Video/${videoId}`);
-      if (res.data.statusCode === 200) {
-        setVideoData(res.data.data);
+      const res = await AxiosInstance.get(`api/Video/${videoId}`);
+     
+      if (res.data && res.data.id) {
+        setVideoData(res.data);
       } else {
-        throw new Error(res.data.message);
+        throw new Error("فشل في تحميل الفيديو");
       }
     } catch (err) {
+      console.error("Error fetching video:", err);
       setVideoData(null);
-      setError(err);
+      setError(err.response?.data?.message || err.message || "حدث خطأ في تحميل الفيديو");
     } finally {
       setIsLoading(false);
     }

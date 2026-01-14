@@ -45,7 +45,7 @@ function App() {
         { path: 'lessons', element: <Lessons /> },
         { path: 'lessons/:id', element: <Lessons /> },
         { path: 'lesson_details/:id', element: <LessonDetails /> },
-        { path: 'video_details', element: <VideoDetails /> },
+        { path: 'video_details/:id', element: <VideoDetails /> },
         { path: 'settings', element: <Settings /> },
         { path: 'profile', element: <Profile /> },
         { path: 'calendar', element: <Calendar /> },

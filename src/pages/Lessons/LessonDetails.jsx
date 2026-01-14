@@ -63,12 +63,14 @@ function LessonDetails() {
 
 
     const transformedVideos = lesson.videos?.map((video, index) => ({
-        id: video.id || index + 1,
-        img: video.thumbnailUrl || "/video-default.jpg",
-        title: video.title || `Video ${index + 1}`,
-        desc: video.description || "شرح الدرس",
-        href: video.videoUrl || "/video_details"
-    })) || [];
+    id: video.id || index + 1,
+    title: video.videoName || `Video ${index + 1}`,
+    desc: video.description || "شرح الدرس",
+    href: `/video_details/${video.id}`,
+    videoUrl: video.url,
+    thumbnailUrl: video.thumbnailUrl,
+})) || [];
+
 
     const handleCardClick = (attachment) => {
         console.log('Attachment clicked:', attachment);
@@ -88,28 +90,31 @@ function LessonDetails() {
                     title={lesson.title}
                 />
             </div>
-
-            <div dir="rtl">
-                <DetailsCard
-                    title="شرح الدرس"
+            <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
+               <div dir="rtl">
+                 <div className="flex flex-row justify-start items-center gap-6">
+                    
+                        <h2 className="text-3xl font-bold px-6 ">تفاصيل الدرس</h2>
+                    </div>
+                 <DetailsCard 
                     icon="lesson-icon.png"
                     description={lesson.description || "لا يوجد وصف متاح"}
                 />
-            </div>
+                </div>
 
-            <div dir="rtl">
+            {/* <div dir="rtl">
                 <DetailsCard
                     title="المدرس"
                     icon="profile-icon.png"
-                    teacherName={lesson.teacherName ? `الأستاذ / ${lesson.teacherName}` : "لم يتم تعيين مدرس"}
+                    // teacherName={lesson.teacherName ? `الأستاذ / ${lesson.teacherName}` : "لم يتم تعيين مدرس"}
                     description={lesson.teacherName ? `الأستاذ ${lesson.teacherName} هو مدرس متميز...` : "لم يتم تعيين مدرس لهذا الدرس بعد"}
                 />
-            </div>
+            </div> */}
 
             {transformedAttachments.length > 0 && (
                 <div className="flex flex-col gap-4 px-6">
                     <div className="flex flex-row justify-start items-center gap-6">
-                        <img src="attachmennts.png" alt='attachmennts' className="w-12 h-12" />
+                        
                         <h2 className="text-3xl font-bold py-4">المرفقات</h2>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10">
@@ -129,12 +134,12 @@ function LessonDetails() {
             )}
 
             {transformedVideos.length > 0 && (
-                <div className="flex flex-col gap-4 px-6">
+                <div className="flex flex-col gap-4 px-6 ">
                     <div className="flex flex-row justify-start items-center gap-6">
-                        <img src="lessonss.png" alt='lessonss' className="w-12 h-12" />
+                       
                         <h2 className="text-3xl font-bold py-4">شرح الدرس</h2>
                     </div>
-                    <div className="flex flex-wrap gap-6 mt-6 mx-4 max-w-5xl">
+                    <div className="flex gap-6 mt-6 max-w-5xl">
                         {transformedVideos.map((video) => (
                             <VideoCard
                                 key={video.id}
@@ -150,6 +155,7 @@ function LessonDetails() {
                     <p className="text-xl text-gray-600">لا توجد مرفقات أو فيديوهات متاحة لهذا الدرس حالياً</p>
                 </div>
             )}
+            </div>
         </>
     );
 }
