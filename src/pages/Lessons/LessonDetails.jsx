@@ -206,7 +206,7 @@ const transformedAttachments = lesson.attachments?.map((attachment, index) => {
                     <div 
                         className={`cursor-pointer ${downloading === attachment.id }`}
                         onClick={() => handleCardClick(attachment)}
-                        title={`انقر لتنزيل ${attachment.text}`}
+                        title={attachment.text}
                     >
                         <Card
                             id={attachment.id}
