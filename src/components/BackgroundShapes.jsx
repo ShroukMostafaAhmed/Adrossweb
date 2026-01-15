@@ -19,7 +19,7 @@ export default function BackgroundShapes() {
   <img
     src="/shapes/shape_123.png"
     className="absolute bottom-[21%] left-[4%] z-0"
-    alt="Shape 123"
+    alt="Shape 12"
   />
     </>
   );

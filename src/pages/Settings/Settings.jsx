@@ -57,7 +57,7 @@ export default function ModernSubscriptionPlans() {
 
             setPlans(processedPlans);
         } else {
-            // Fallback to default plans if API fails or returns empty
+          
             setPlans([
                 {
                     id: 'basic',
