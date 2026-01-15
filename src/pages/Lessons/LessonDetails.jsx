@@ -211,7 +211,7 @@ const transformedAttachments = lesson.attachments?.map((attachment, index) => {
                         <Card
                             id={attachment.id}
                             href={attachment.url}
-                            color={attachment.color}
+                            color='blue'
                             text={attachment.title}
                             number={attachment.image}
                             onClick={() => {}}
