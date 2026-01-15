@@ -12,10 +12,11 @@ export default function VideoCard({ video }) {
         >
             <div className="relative">
                 <img
-                    src={video?.thumbnailUrl || "/video-default.jpg"}
-                    alt="thumbnail"
-                    className="w-full aspect-video object-cover"
+                 src={video?.thumbnailUrl || "/video-default.jpg"}
+                 alt="thumbnail"
+                 className="w-full aspect-video object-cover"
                 />
+
 
                 <div className="absolute inset-0 flex items-center justify-center">
                     <button className="bg-white rounded-full shadow-lg ">

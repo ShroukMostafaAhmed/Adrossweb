@@ -79,6 +79,11 @@ function VideoDetails() {
         ? videoData.thumbnailUrl 
         : `http://adros-mrashed.runasp.net${videoData.thumbnailUrl}`;
 
+    // بناء وصف المدرس من البيانات المتاحة
+    const teacherDescription = videoData.teacherName 
+        ? `الأستاذ ${videoData.teacherName}${videoData.teacherAbout ? ` - ${videoData.teacherAbout}` : ''}`
+        : "لم يتم تعيين مدرس لهذا الدرس بعد";
+
     return (
         <>
             <div className="flex flex-col gap-4 pb-10">
@@ -100,14 +105,15 @@ function VideoDetails() {
                         />
                     </div>
 
-                   {/* <div dir="rtl">
-                <DetailsCard
-                    title="المدرس"
-                    icon="profile-icon.png"
-                    // teacherName={lesson.teacherName ? `الأستاذ / ${lesson.teacherName}` : "لم يتم تعيين مدرس"}
-                    description={video.teacherName ? `الأستاذ ${video.teacherName} هو مدرس متميز...` : "لم يتم تعيين مدرس لهذا الدرس بعد"}
-                />
-            </div>   */}
+                    {/* قسم معلومات المدرس */}
+                    <div dir="rtl" className="px-4 lg:px-12 pt-6">
+                        <DetailsCard
+                            title="المدرس"
+                            icon="profile-icon.png"
+                            description={teacherDescription}
+                        />
+                    </div>
+
                 </div>
             </div>
         </>

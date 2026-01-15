@@ -104,7 +104,7 @@ function Home() {
                   key={skill.id}
                   video={{
                     id: skill.id,
-                    img: skill.imageUrl,
+                   thumbnailUrl: skill.thumbnailUrl,
                     title: skill.title,
                     desc: skill.description,
                     href: `skill_details/${skill.id}`,

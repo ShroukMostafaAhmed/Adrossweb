@@ -17,7 +17,7 @@ function appendCacheBuster(src) {
 }
 
 const Profile = () => {
-  // ✅ استدعِ كل الـ hooks أولاً (بدون أي return قبلها)
+  
   const { data, loading, error } = useGetProfile();
   const location = useLocation();
   const isLoggedIn = location.pathname !== "/login" && location.pathname !== "/register";
@@ -104,7 +104,7 @@ const Profile = () => {
     };
   }, [photoKey, serverImagePath]);
 
-  // اختيار صورة من الجهاز → خزّن محليًا + فعّل preferLocal
+
   const handlePhotoUpdate = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -179,11 +179,25 @@ const Profile = () => {
       desc: "زمن الدراسة",
     },
   ];
+const staticChartData = [
+  { day: "السبت", value: 20 },
+  { day: "الأحد", value: 35 },
+  { day: "الاثنين", value: 50 },
+  { day: "الثلاثاء", value: 30 },
+  { day: "الأربعاء", value: 55 },
+  { day: "الخميس", value: 45 },
+  { day: "الجمعة", value: 25 },
+];
 
-  const chartData = dailyAch.map(({ day, studyTime }) => ({
-    day,
-    value: parseInt(studyTime) || 0,
-  }));
+  const newLocal = Array.isArray(dailyAch) && dailyAch.length > 0
+    ? dailyAch.map(({ day, studyTime }) => ({
+      day,
+      value: parseInt(studyTime) || 0,
+    }))
+    : staticChartData;
+ const chartData =
+  newLocal;
+
 
   return (
     <div className={`font-bold px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 ${isLoggedIn ? "md:mr-[4px]" : ""}`} dir="rtl">
