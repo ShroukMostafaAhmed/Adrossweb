@@ -179,14 +179,14 @@ function LessonCard({ lesson }) {
         {/* زر التشغيل */}
         <button className="absolute inset-0 flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
           <img 
-            src="/icon.png" 
+            src="/icon.png"      
             alt="Play Icon" 
             className="w-12 h-12 sm:w-15 sm:h-15 bg-white rounded-full shadow-lg"
           />
         </button>
       </div>
 
-      {/* النصوص */}
+   
       <div className="p-3 sm:p-4 space-y-2 sm:space-y-3">
         {/* العنوان وزر الحذف في صف واحد */}
         <div className="flex items-center justify-between gap-2">
