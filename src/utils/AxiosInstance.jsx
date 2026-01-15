@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const AxiosInstance = axios.create({
-  baseURL: "http://adros-mrashed.runasp.net/",
+  baseURL: "https://adros-mrashed.runasp.net/",
 });
 
 AxiosInstance.interceptors.request.use(
