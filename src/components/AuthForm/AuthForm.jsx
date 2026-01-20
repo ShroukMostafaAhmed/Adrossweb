@@ -16,7 +16,7 @@ const AuthForm = ({
 
   if (centered) {
     return (
-      <div className="flex justify-center items-center min-h-[80vh] px-4 pb-18 pt-50">
+      <div className="flex justify-center items-center min-h-[50vh] px-4 pb-18 pt-40">
         <div dir="rtl" className="w-full max-w-lg md:max-w-2xl lg:max-w-4xl mx-auto px-4 ">
           <div className="bg-white p-8 rounded-2xl shadow-2xl h-[500px]">
             <h2 className="text-xl font-bold text-gray-900 mb-6 text-center">{title}</h2>

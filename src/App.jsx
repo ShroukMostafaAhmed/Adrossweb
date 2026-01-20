@@ -1,7 +1,9 @@
 import './App.css'
 import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 import AppLayout from "./AppLayout.jsx";
+import Landing from "./pages/Landing/Landing.jsx";
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login/Login.jsx";
 import Register from "./pages/Register/Register.jsx";
@@ -32,55 +34,58 @@ function App() {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  const routes = createBrowserRouter([
-    
+  const router = createBrowserRouter([
+    // Landing Page أول حاجة
     {
       path: "/",
+      element: <Landing />,
+    },
+    // الصفحات المحمية بعد تسجيل الدخول
+    {
+      path: "/app",
       element: token ? <AppLayout /> : <Navigate to="/login" replace />,
       children: [
         { index: true, element: <Home /> },
-        { path: 'skill_details/:id', element: <SkillDetails /> },
-        { path: 'downloads', element: <Downloads /> },
-        { path: 'stage_details/:id', element: <StageDetails /> },
-        { path: 'level_details/:id', element: <LevelDetails /> },
-        { path: 'lessons', element: <Lessons /> },
-        { path: 'lessons/:id', element: <Lessons /> },
-        { path: 'lesson_details/:id', element: <LessonDetails /> },
-        { path: 'video_details/:id', element: <VideoDetails /> },
-        { path: 'settings', element: <Settings /> },
-        { path: 'profile', element: <Profile /> },
-        { path: 'calendar', element: <Calendar /> },
-        { path: 'units', element: <Units /> },
-        { path: 'units/:id', element: <Units /> },
-
+        { path: "skill_details/:id", element: <SkillDetails /> },
+        { path: "downloads", element: <Downloads /> },
+        { path: "stage_details/:id", element: <StageDetails /> },
+        { path: "level_details/:id", element: <LevelDetails /> },
+        { path: "lessons", element: <Lessons /> },
+        { path: "lessons/:id", element: <Lessons /> },
+        { path: "lesson_details/:id", element: <LessonDetails /> },
+        { path: "video_details/:id", element: <VideoDetails /> },
+        { path: "settings", element: <Settings /> },
+        { path: "profile", element: <Profile /> },
+        { path: "calendar", element: <Calendar /> },
+        { path: "units", element: <Units /> },
+        { path: "units/:id", element: <Units /> },
         {
-          path: 'exam',
+          path: "exam",
           children: [
             { index: true, element: <Exam /> },
-            { path: 'reviews', element: <ExamReviews /> },
-            { path: 'review_solutions', element: <ExamResults /> },
-          ]
+            { path: "reviews", element: <ExamReviews /> },
+            { path: "review_solutions", element: <ExamResults /> },
+          ],
         },
-        { path: "*", element: <NotFound /> },
       ],
     },
+    // Login & Register
     {
       path: "/login",
-      element: token ? <Navigate to="/" replace /> : <Login />,
+      element: token ? <Navigate to="/app" replace /> : <Login />,
     },
     {
       path: "/register",
-      element: token ? <Navigate to="/" replace /> : <Register />,
-    }
+      element: token ? <Navigate to="/app" replace /> : <Register />,
+    },
+    // Not Found
+    {
+      path: "*",
+      element: <NotFound />,
+    },
   ]);
 
-  return (
-    <>
-      <RouterProvider router={routes}>
-        <AppLayout />
-      </RouterProvider>
-    </>
-  )
+  return <RouterProvider router={router} />;
 }
 
 export default App;

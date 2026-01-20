@@ -22,7 +22,7 @@ export default function RegisterForm() {
   const [formData, setFormData] = useState({
     FirstName: "",
     LastName: "",
-    Email: "", // Changed from PhoneNumber to Email
+    Email: "",
     Password: "",
     ConfirmPassword: "",
     StageId: "",
@@ -30,20 +30,16 @@ export default function RegisterForm() {
   });
 
   const [error, setError] = useState("");
-
-  // State for stages and levels
   const [stages, setStages] = useState([]);
   const [levels, setLevels] = useState([]);
   const [stageLoading, setStageLoading] = useState(false);
   const [levelLoading, setLevelLoading] = useState(false);
   const [stageError, setStageError] = useState("");
   const [levelError, setLevelError] = useState("");
-
-  // Cache for levels to reduce API calls
   const levelsCacheRef = useRef({});
   const levelAbortRef = useRef(null);
 
-  // Fetch stages on component mount
+  
   useEffect(() => {
     const fetchStages = async () => {
       setStageLoading(true);
@@ -84,7 +80,6 @@ export default function RegisterForm() {
     fetchStages();
   }, []);
 
-  // Fetch levels when stage is selected
   useEffect(() => {
     const stageId = formData.StageId;
 
@@ -158,7 +153,6 @@ export default function RegisterForm() {
     };
   }, [formData.StageId]);
 
-  // Email validation function
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -177,7 +171,6 @@ export default function RegisterForm() {
       LevelId,
     } = formData;
 
-    // Validation
     if (
       !FirstName ||
       !LastName ||
@@ -191,7 +184,6 @@ export default function RegisterForm() {
       return;
     }
 
-    // Email validation
     if (!isValidEmail(Email)) {
       setError("يرجى إدخال بريد إلكتروني صحيح");
       return;
@@ -209,15 +201,14 @@ export default function RegisterForm() {
 
     setError("");
 
-    // Prepare data for API
     const apiData = {
       firstName: FirstName,
       lastName: LastName,
-      email: Email, // Changed from phoneNumber to email
+      email: Email,
       password: Password,
       confirmPassword: ConfirmPassword,
       levelId: LevelId,
-      stageId: StageId, // Added stageId as required by backend
+      stageId: StageId, 
     };
 
     console.log('Submitting registration:', apiData);
