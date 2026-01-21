@@ -12,11 +12,10 @@ function useRegister() {
     try {
       console.log("Sending registration data:", data);
 
-      // Updated payload to include email instead of phoneNumber
       const payload = {
         firstName: data.firstName,
         lastName: data.lastName,
-        email: data.email, // Changed from phoneNumber to email
+        email: data.email, 
         password: data.password,
         confirmPassword: data.confirmPassword,
         levelId: data.levelId,
@@ -122,7 +121,6 @@ function useRegister() {
             errorMessage = "الخدمة غير متوفرة حالياً";
             break;
           case 409:
-            // Updated error message for email conflict
             errorMessage = "البريد الإلكتروني موجود بالفعل، يرجى استخدام بريد آخر";
             break;
           case 422:
