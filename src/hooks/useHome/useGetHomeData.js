@@ -10,7 +10,7 @@ function useGetHomeData() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get("/api/Home");
+      const res = await AxiosInstance.get("/api/Home/GetHome");
       if (res.data.statusCode === 200) {
         setData(res.data.data);
       } else {
