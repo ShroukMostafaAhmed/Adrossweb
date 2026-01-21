@@ -1,5 +1,5 @@
 [[redirects]]
   from = "/api/*"
-  to = "http://adrosapi.runasp.net/api/:splat"
+  to = "https://adrosapi.runasp.net/api/:splat"
   status = 200
   force = true

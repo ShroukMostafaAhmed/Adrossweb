@@ -75,9 +75,9 @@ function VideoDetails() {
     }
 
     
-    const thumbnailUrl = videoData.thumbnailUrl?.startsWith('http') 
+    const thumbnailUrl = videoData.thumbnailUrl?.startsWith('https') 
         ? videoData.thumbnailUrl 
-        : `http://adros-mrashed.runasp.net${videoData.thumbnailUrl}`;
+        : `https://adros-mrashed.runasp.net${videoData.thumbnailUrl}`;
 
     // بناء وصف المدرس من البيانات المتاحة
     const teacherDescription = videoData.teacherName 

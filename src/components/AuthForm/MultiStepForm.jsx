@@ -13,7 +13,7 @@ const selectClass =
 
 const ReqStar = () => <span className="text-red-500">*</span>;
 
-const API_BASE = import.meta?.env?.VITE_API_BASE_URL || "http://adros-mrashed.runasp.net";
+const API_BASE = "https://adros-mrashed.runasp.net";
 
 export default function RegisterForm() {
   const navigate = useNavigate();

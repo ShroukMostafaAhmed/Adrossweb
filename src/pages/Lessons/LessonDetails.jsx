@@ -51,7 +51,7 @@ function LessonDetails() {
 
 const transformedAttachments = lesson.attachments?.map((attachment, index) => {
   const fileUrl = attachment.url
-  ? attachment.url.startsWith("http")
+  ? attachment.url.startsWith("https")
     ? attachment.url
     : `${BASE_FILE_URL}${attachment.url}`
   : null;
