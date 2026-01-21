@@ -22,7 +22,7 @@ function LevelsCard({ id, title, imagePath }) {
                 <button
                     onClick={(e) => {
                         e.stopPropagation();
-                        navigate('/level_Details/' + id, {
+                        navigate('/app/level_Details/' + id, {
                             state: { id, title }
                         });
                     }}

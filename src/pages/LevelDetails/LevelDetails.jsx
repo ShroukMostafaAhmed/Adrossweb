@@ -42,7 +42,7 @@ function LevelDetails() {
       text: sub.title
     };
     setState(newState);
-    navigate(`/units/${sub.id}`, { state: newState });
+    navigate(`/app/units/${sub.id}`, { state: newState });
   };
 
   useEffect(() => {

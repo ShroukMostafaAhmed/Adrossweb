@@ -41,7 +41,7 @@ function StageCard({ stage }) {
         <button
           onClick={(e) => {
             e.stopPropagation();
-            navigate('/stage_details/' + stage.id, {
+            navigate('/app/stage_details/' + stage.id, {
               state: {
                 id: stage.id,
                 title: stage.title,

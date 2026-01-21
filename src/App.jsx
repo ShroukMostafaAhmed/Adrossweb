@@ -35,12 +35,19 @@ function App() {
   }, []);
 
   const router = createBrowserRouter([
-    // Landing Page أول حاجة
+
+    { path: "/", element: <Landing /> },
+
+
     {
-      path: "/",
-      element: <Landing />,
+      path: "/login",
+      element: token ? <Navigate to="/app" replace /> : <Login />
     },
-    // الصفحات المحمية بعد تسجيل الدخول
+    {
+      path: "/register",
+      element: token ? <Navigate to="/app" replace /> : <Register />
+    },
+
     {
       path: "/app",
       element: token ? <AppLayout /> : <Navigate to="/login" replace />,
@@ -69,20 +76,9 @@ function App() {
         },
       ],
     },
-    // Login & Register
-    {
-      path: "/login",
-      element: token ? <Navigate to="/app" replace /> : <Login />,
-    },
-    {
-      path: "/register",
-      element: token ? <Navigate to="/app" replace /> : <Register />,
-    },
-    // Not Found
-    {
-      path: "*",
-      element: <NotFound />,
-    },
+
+    // Catch all NotFound
+    { path: "*", element: <NotFound /> },
   ]);
 
   return <RouterProvider router={router} />;

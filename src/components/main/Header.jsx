@@ -18,7 +18,7 @@ const Header = () => {
     localStorage.removeItem("Token");
     localStorage.removeItem("validTo");
     localStorage.removeItem("userImage");
-    window.location.href = "/login";
+    navigate("/login"); 
   };
 
   useEffect(() => {
@@ -35,11 +35,11 @@ const Header = () => {
   return (
     <header className="w-full bg-white z-50">
       <div
-        className="w-full flex flex-row justify-between items-center lg:justify-between py-5 px-6 shadow-2xl shadow-blue-100  border-blue-100 relative"
+        className="w-full flex flex-row justify-between items-center lg:justify-between py-5 px-6 shadow-2xl shadow-blue-100 border-blue-100 relative"
         dir="rtl"
         style={{ minHeight: "120px" }}
       >
-        {/* ☰ زر القائمة - في اليمين على الموبايل */}
+        {/* ☰ زر القائمة - في الموبايل */}
         {isLoggedIn && (
           <div className="lg:hidden order-1 lg:order-3">
             <button
@@ -61,11 +61,11 @@ const Header = () => {
                   <div className="py-2 text-right">
                     <button
                       onClick={() => {
-                        navigate("/");
+                        navigate("/app");
                         setIsMobileMenuOpen(false);
                       }}
                       className={`block w-full px-4 py-3 text-right transition-colors ${
-                        location.pathname === "/" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
+                        location.pathname === "/app" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
                       }`}
                     >
                       الصفحة الرئيسية
@@ -73,11 +73,11 @@ const Header = () => {
 
                     <button
                       onClick={() => {
-                        navigate("/downloads");
+                        navigate("/app/downloads");
                         setIsMobileMenuOpen(false);
                       }}
                       className={`block w-full px-4 py-3 text-right transition-colors ${
-                        location.pathname === "/downloads" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
+                        location.pathname === "/app/downloads" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
                       }`}
                     >
                       التنزيلات
@@ -85,11 +85,11 @@ const Header = () => {
 
                     <button
                       onClick={() => {
-                        navigate("/calendar");
+                        navigate("/app/calendar");
                         setIsMobileMenuOpen(false);
                       }}
                       className={`block w-full px-4 py-3 text-right transition-colors ${
-                        location.pathname === "/calendar" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
+                        location.pathname === "/app/calendar" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
                       }`}
                     >
                       التقويم
@@ -97,11 +97,11 @@ const Header = () => {
 
                     <button
                       onClick={() => {
-                        navigate("/settings");
+                        navigate("/app/settings");
                         setIsMobileMenuOpen(false);
                       }}
                       className={`block w-full px-4 py-3 text-right transition-colors ${
-                        location.pathname === "/settings" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
+                        location.pathname === "/app/settings" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
                       }`}
                     >
                       الإعدادات
@@ -113,27 +113,47 @@ const Header = () => {
           </div>
         )}
 
-        {/* 🖼 اللوجو في المنتصف على الموبايل */}
+        {/* 🖼 اللوجو في المنتصف */}
         <div className="absolute left-1/2 -translate-x-1/2 lg:static lg:translate-x-0 order-2 lg:order-1 flex items-center gap-2 mr-35">
           <img
             src="/logo.png"
             alt="Adrees Logo"
             className="h-20 w-18 cursor-pointer"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/app")}
           />
         </div>
 
         {/* 🔗 روابط التنقل - تظهر فقط في الشاشات الكبيرة */}
         {isLoggedIn && (
           <nav className="hidden lg:flex gap-20 text-[#001F3F] font-medium text-[20px] order-3 lg:order-2">
-            <button onClick={() => navigate("/")} className={`hover:text-blue-600 ${location.pathname === "/" ? "text-blue-600 font-bold" : ""}`}>الصفحة الرئيسية</button>
-            <button onClick={() => navigate("/downloads")} className={`hover:text-blue-600 ${location.pathname === "/downloads" ? "text-blue-600 font-bold" : ""}`}>التنزيلات</button>
-            <button onClick={() => navigate("/calendar")} className={`hover:text-blue-600 ${location.pathname === "/calendar" ? "text-blue-600 font-bold" : ""}`}>التقويم</button>
-            <button onClick={() => navigate("/settings")} className={`hover:text-blue-600 ${location.pathname === "/settings" ? "text-blue-600 font-bold" : ""}`}>الباقات</button>
+            <button
+              onClick={() => navigate("/app")}
+              className={`hover:text-blue-600 ${location.pathname === "/app" ? "text-blue-600 font-bold" : ""}`}
+            >
+              الصفحة الرئيسية
+            </button>
+            <button
+              onClick={() => navigate("/app/downloads")}
+              className={`hover:text-blue-600 ${location.pathname === "/app/downloads" ? "text-blue-600 font-bold" : ""}`}
+            >
+              التنزيلات
+            </button>
+            <button
+              onClick={() => navigate("/app/calendar")}
+              className={`hover:text-blue-600 ${location.pathname === "/app/calendar" ? "text-blue-600 font-bold" : ""}`}
+            >
+              التقويم
+            </button>
+            <button
+              onClick={() => navigate("/app/settings")}
+              className={`hover:text-blue-600 ${location.pathname === "/app/settings" ? "text-blue-600 font-bold" : ""}`}
+            >
+              الإعدادات
+            </button>
           </nav>
         )}
 
-        {/* 👤 أيقونة البروفايل - يسار على الموبايل */}
+        {/* 👤 أيقونة البروفايل */}
         {isLoggedIn && (
           <div className="relative order-3 lg:order-2 mr-auto lg:mr-0 lg:ml-35" ref={dropdownRef}>
             <button
@@ -161,16 +181,27 @@ const Header = () => {
                   className="absolute left-0 mt-3 z-50 w-48 bg-white rounded-lg shadow-xl border border-gray-200"
                 >
                   <div className="absolute -top-2 left-4 w-4 h-4 bg-white rotate-45 border-l border-t border-gray-200"></div>
-
                   <div className="py-2">
-                    <div onClick={() => { navigate("/profile"); setIsDropdownOpen(false); }} className="flex items-center gap-3 px-4 py-3 cursor-pointer text-gray-700 hover:text-blue-600 transition-colors">
+                    <div
+                      onClick={() => {
+                        navigate("/app/profile");
+                        setIsDropdownOpen(false);
+                      }}
+                      className="flex items-center gap-3 px-4 py-3 cursor-pointer text-gray-700 hover:text-blue-600 transition-colors"
+                    >
                       <User className="w-5 h-5" />
                       <span className="font-medium">الملف الشخصي</span>
                     </div>
 
                     <hr className="border-gray-100 my-1" />
 
-                    <div onClick={() => { handleLogout(); setIsDropdownOpen(false); }} className="flex items-center gap-3 px-4 py-3 cursor-pointer text-gray-700 hover:text-red-600 transition-colors">
+                    <div
+                      onClick={() => {
+                        handleLogout();
+                        setIsDropdownOpen(false);
+                      }}
+                      className="flex items-center gap-3 px-4 py-3 cursor-pointer text-gray-700 hover:text-red-600 transition-colors"
+                    >
                       <LogOut className="w-5 h-5" />
                       <span className="font-medium">تسجيل الخروج</span>
                     </div>

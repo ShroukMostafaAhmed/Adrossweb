@@ -83,7 +83,7 @@ const transformedAttachments = lesson.attachments?.map((attachment, index) => {
         id: video.id || index + 1,
         title: video.videoName || `Video ${index + 1}`,
         desc: video.description || "شرح الدرس",
-        href: `/video_details/${video.id}`,
+        href: `/app/video_details/${video.id}`,
         videoUrl: video.url,
         thumbnailUrl: video.thumbnailUrl,
     })) || [];

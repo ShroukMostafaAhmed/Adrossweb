@@ -20,7 +20,7 @@ const ExamReviews = () => {
 
     // handling navigating to review solutions page
     const handleNavigate = (examId) => {
-        navigate('/exam/review_solutions', { state : {id: examId}});
+        navigate('/app/exam/review_solutions', { state : {id: examId}});
     }
 
     return (

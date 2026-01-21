@@ -32,7 +32,7 @@ function Lessons() {
   }, [state?.unitId, getLessonsByUnitId]);
 
   const handleCardClick = (lesson) => {
-    navigate(`/lesson_details/${lesson.id}`, { state: { title: lesson.title } });
+    navigate(`/app/lesson_details/${lesson.id}`, { state: { title: lesson.title } });
   };
 
   // Extract unit info from lessons response

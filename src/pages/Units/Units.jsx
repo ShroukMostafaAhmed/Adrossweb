@@ -55,7 +55,7 @@ function Units() {
 
     // الانتقال لصفحة الدروس
     const handleCardClick = (unit) => {
-        navigate(`/lessons/${unit.id}`, {
+        navigate(`/app/lessons/${unit.id}`, {
             state: {
                 ...state,
                 unitId: unit.id,

@@ -41,7 +41,7 @@ function StageDetails() {
   }, [state]);
 
   const handleCardClick = (level) => {
-    navigate("/level_details/" + level.id, {
+    navigate("/app/level_details/" + level.id, {
       state: {
         id: level.id,
         title: state.title,
