@@ -10,7 +10,7 @@ function useBannerById() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await AxiosInstance.get(`api/Banners/${bannerId}}`);
+      const res = await AxiosInstance.get(`/Banners/${bannerId}}`);
       if (res.data.statusCode === 200) {
         setBanner(res.data.data);
       } else {

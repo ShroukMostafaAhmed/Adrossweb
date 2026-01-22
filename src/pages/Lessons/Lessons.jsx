@@ -3,41 +3,58 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/main/BreadCrumb.jsx";
 import BannerCard from "../../components/Cards/BannerCard.jsx";
 import Card from "../../components/Cards/Card.jsx";
-import DetailsCard from "../../components/Cards/DetailsCard.jsx";
 import useGetLessonsByUnitId from "../../hooks/useLessons/useGetLessonsByUnitId";
 
 function Lessons() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { loading, lessons, error, getLessonsByUnitId } = useGetLessonsByUnitId();
 
+  const { loading, data, error, getLessonsByUnitId } =
+    useGetLessonsByUnitId();
   const state = useMemo(() => {
     const savedState = localStorage.getItem("lessonState");
-    const initialState = location.state || (savedState ? JSON.parse(savedState) : {});
+    const initialState =
+      location.state || (savedState ? JSON.parse(savedState) : {});
     localStorage.setItem("lessonState", JSON.stringify(initialState));
     return initialState;
   }, [location.state]);
 
-  const items = [
-    { label: "الرئيسية", href: "/" },
-    { label: state.stageTitle || "المرحلة", href: "/stage_details", state: { title: state.stageTitle } },
-    { label: state.levelTitle || "المستوى", href: `/level_details/${state.levelId}`, state },
-    { label: state.subjectTitle || "المادة", href: `/units/${state.subjectId}`, state },
-    { label: state.unitTitle || "الوحدة" }
-  ];
-
   useEffect(() => {
-    if (!state?.unitId) return;
-    getLessonsByUnitId(state.unitId);
+    if (state?.unitId) {
+      getLessonsByUnitId(state.unitId);
+    }
   }, [state?.unitId, getLessonsByUnitId]);
 
-  const handleCardClick = (lesson) => {
-    navigate(`/app/lesson_details/${lesson.id}`, { state: { title: lesson.title } });
-  };
+  const lessons = data?.lessons ?? [];
+  const unitTitle = data?.unitTitle ?? state.unitTitle ?? "الوحدة";
+  const unitDescription =
+    data?.unitDescription ?? state.unitDescription ?? "لا يوجد وصف متاح";
 
-  // Extract unit info from lessons response
-  const unitTitle = lessons.length > 0 ? state.unitTitle : null;
-  const unitDescription = state.unitDescription || "هذا الوصف للاختبار";
+  const items = [
+    { label: "الرئيسية", href: "/" },
+    {
+      label: state.stageTitle || "المرحلة",
+      href: "/stage_details",
+      state: { title: state.stageTitle },
+    },
+    {
+      label: state.levelTitle || "المستوى",
+      href: `/level_details/${state.levelId}`,
+      state,
+    },
+    {
+      label: state.subjectTitle || "المادة",
+      href: `/units/${state.subjectId}`,
+      state,
+    },
+    { label: unitTitle },
+  ];
+
+  const handleCardClick = (lesson) => {
+    navigate(`/app/lesson_details/${lesson.id}`, {
+      state: { title: lesson.title },
+    });
+  };
 
   return (
     <>
@@ -48,32 +65,36 @@ function Lessons() {
         <BannerCard
           imageSrc="/stage1.png"
           imageAlt="Stage Banner"
-          title={state.unitTitle || "الوحدة"}
+          title={unitTitle}
         />
       </div>
 
-      {/* Unit Details Section */}
+      {/* Unit Details */}
       <div className="max-w-6xl mx-35 mb-10 px-6">
-        {!loading && !error && (
+        <div className="text-gray-700 mb-8 leading-relaxed">
+          <span className="font-bold text-2xl text-gray-800 block">
+            هذه الوحدة تتحدث عن:
+          </span>
 
-          <div>
-            <p className="text-gray-700  mb-4 leading-relaxed">
-              <span className="font-bold text-2xl  text-gray-800">هذه الوحدة تتحدث عن:</span> <br />
-              <div className=" pt-5 text-xl">{unitDescription}</div>
-            </p>
-          </div>
-
-        )}
-        <br />
+          {loading ? (
+            <div className="pt-5 text-xl">جاري تحميل الوصف...</div>
+          ) : (
+            <div className="pt-5 text-xl">{unitDescription}</div>
+          )}
+        </div>
 
         <h2 className="text-2xl font-bold mb-6">اختر الدرس</h2>
 
         {loading && (
-          <div className="text-center py-10 text-xl">جاري تحميل الدروس...</div>
+          <div className="text-center py-10 text-xl">
+            جاري تحميل الدروس...
+          </div>
         )}
 
         {error && (
-          <div className="text-center py-10 text-red-600 text-xl">⚠️ {error}</div>
+          <div className="text-center py-10 text-red-600 text-xl">
+            ⚠️ {error}
+          </div>
         )}
 
         {!loading && !error && lessons.length === 0 && (
@@ -86,10 +107,15 @@ function Lessons() {
           {lessons.map((lesson) => (
             <Card
               key={lesson.id}
-              id={lesson.id}
               color="blue"
               text={lesson.title}
-              number={<img src="/logo.png" alt={lesson.title} className="w-12 h-12" />}
+              number={
+                <img
+                  src="/logo.png"
+                  alt={lesson.title}
+                  className="w-12 h-12"
+                />
+              }
               onClick={() => handleCardClick(lesson)}
             />
           ))}
