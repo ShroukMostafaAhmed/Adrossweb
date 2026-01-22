@@ -109,13 +109,11 @@ function extractVideoInfo(input) {
   
   if (!cleanUrl) return { type: 'unknown', embedUrl: null };
 
-  // Try to parse as YouTube
   const youtubeEmbed = toYoutubeEmbed(cleanUrl);
   if (youtubeEmbed) {
     return { type: 'youtube', embedUrl: youtubeEmbed };
   }
 
-  // Try to parse as Vimeo
   const vimeoEmbed = toVimeoEmbed(cleanUrl);
   if (vimeoEmbed) {
     return { type: 'vimeo', embedUrl: vimeoEmbed };
@@ -193,15 +191,9 @@ function toVimeoEmbed(cleanUrl) {
     
     console.log('🔗 Vimeo URL parsed:', { hostname, pathSegments });
 
-    // Check for vimeo.com URLs
     if (hostname === 'vimeo.com' || hostname === 'player.vimeo.com') {
       let videoId = null;
       
-      // Different Vimeo URL patterns:
-      // 1. https://vimeo.com/1157170696
-      // 2. https://vimeo.com/1157170696?share=copy&fl=sv&fe=ci
-      // 3. https://player.vimeo.com/video/1157170696
-      // 4. https://vimeo.com/showcase/... (not a direct video)
       
       if (hostname === 'player.vimeo.com' && pathSegments[0] === 'video') {
         videoId = pathSegments[1];
@@ -209,11 +201,9 @@ function toVimeoEmbed(cleanUrl) {
         videoId = pathSegments[0];
       }
       
-      // Validate video ID (Vimeo IDs are numeric)
       if (videoId && VIMEO_ID_PATTERN.test(videoId)) {
         console.log('✅ Vimeo URL detected - ID:', videoId);
         
-        // Build Vimeo embed URL with parameters
         const params = new URLSearchParams({
           autoplay: "0",
           title: "0",
@@ -223,7 +213,6 @@ function toVimeoEmbed(cleanUrl) {
           autopause: "0"
         });
         
-        // Check for timestamp parameter (Vimeo uses #t=)
         const hashMatch = cleanUrl.match(/#t=(\d+s?)/);
         if (hashMatch) {
           params.set("autoplay", "1");
@@ -233,7 +222,6 @@ function toVimeoEmbed(cleanUrl) {
       }
     }
 
-    // Check for vimeo.com in any subdomain
     if (hostname.includes('vimeo.com')) {
       const idMatch = cleanUrl.match(/vimeo\.com\/(\d+)/);
       if (idMatch && idMatch[1]) {
@@ -246,7 +234,6 @@ function toVimeoEmbed(cleanUrl) {
     console.warn('⚠️ Vimeo URL parsing failed:', urlError.message);
   }
 
-  // Try to extract numeric ID from any string
   const idMatch = cleanUrl.match(/(\d{8,})/);
   if (idMatch && idMatch[1]) {
     console.log('🔍 Extracted potential Vimeo ID:', idMatch[1]);
@@ -307,7 +294,6 @@ export default function VideoPlayer({
     setError("");
   }, [cleanedUrl, videoInfo]);
 
-  // Handle YouTube
   if (videoInfo.type === 'youtube') {
     return (
       <div className="relative w-full max-w-6xl mx-auto rounded-2xl overflow-hidden shadow-lg">
@@ -349,7 +335,6 @@ export default function VideoPlayer({
     );
   }
 
-  // Handle Vimeo
   if (videoInfo.type === 'vimeo') {
     return (
       <div className="relative w-full max-w-6xl mx-auto rounded-2xl overflow-hidden shadow-lg">
@@ -391,7 +376,6 @@ export default function VideoPlayer({
     );
   }
 
-  // Handle regular video files
   const videoSrc = cleanedUrl || "https://www.w3schools.com/html/mov_bbb.mp4";
   
   return (

@@ -229,7 +229,7 @@ const transformedAttachments = lesson.attachments?.map((attachment, index) => {
                         <div className="flex flex-row justify-start items-center gap-6">
                             <h2 className="text-3xl font-bold py-4">شرح الدرس</h2>
                         </div>
-                        <div className="flex  gap-6 mt-6 max-w-5xl">
+                        <div className="flex  gap-6 mt-6 max-w-10xl">
                             {transformedVideos.map((video) => (
                                 <VideoCard
                                     key={video.id}

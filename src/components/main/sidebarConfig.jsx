@@ -1,5 +1,5 @@
 import React from "react";
-import {Settings, Grid2x2, DownloadIcon, Calendar} from "lucide-react";
+import {Subscription, Grid2x2, WatchLater, Calendar} from "lucide-react";
 import { GiTeacher} from "react-icons/gi";
 import {GoPerson} from "react-icons/go";
 
@@ -13,8 +13,8 @@ export const sidebarConfig = [
     },
     {
         title: "التنزيلات",
-        path: "/downloads",
-        icon: <DownloadIcon />,
+        path: "/WatchLater",
+        icon: <WatchLater />,
         subcategories: [],
         key: "students"
     },
@@ -26,11 +26,11 @@ export const sidebarConfig = [
         key: "calendar"
     },
     {
-        title: "الاعدادات",
-        path: "/settings",
-        icon: <Settings />,
+        title: "الاشتراكات",
+        path: "/Subscription",
+        icon: <Subscription />,
         subcategories: [],
-        key: "settings"
+        key: "Subscription"
     },
     {
         title: "الملف الشخصى",

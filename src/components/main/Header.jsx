@@ -73,11 +73,11 @@ const Header = () => {
 
                     <button
                       onClick={() => {
-                        navigate("/app/downloads");
+                        navigate("/app/WatchLater");
                         setIsMobileMenuOpen(false);
                       }}
                       className={`block w-full px-4 py-3 text-right transition-colors ${
-                        location.pathname === "/app/downloads" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
+                        location.pathname === "/app/WatchLater" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
                       }`}
                     >
                       التنزيلات
@@ -97,11 +97,11 @@ const Header = () => {
 
                     <button
                       onClick={() => {
-                        navigate("/app/settings");
+                        navigate("/app/Subscription");
                         setIsMobileMenuOpen(false);
                       }}
                       className={`block w-full px-4 py-3 text-right transition-colors ${
-                        location.pathname === "/app/settings" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
+                        location.pathname === "/app/Subscription" ? "text-blue-600 font-bold" : "text-gray-700 hover:text-blue-600"
                       }`}
                     >
                       الإعدادات
@@ -133,10 +133,10 @@ const Header = () => {
               الصفحة الرئيسية
             </button>
             <button
-              onClick={() => navigate("/app/downloads")}
-              className={`hover:text-blue-600 ${location.pathname === "/app/downloads" ? "text-blue-600 font-bold" : ""}`}
+              onClick={() => navigate("/app/WatchLater")}
+              className={`hover:text-blue-600 ${location.pathname === "/app/WatchLater" ? "text-blue-600 font-bold" : ""}`}
             >
-              التنزيلات
+              المفضلة
             </button>
             <button
               onClick={() => navigate("/app/calendar")}
@@ -145,15 +145,14 @@ const Header = () => {
               التقويم
             </button>
             <button
-              onClick={() => navigate("/app/settings")}
-              className={`hover:text-blue-600 ${location.pathname === "/app/settings" ? "text-blue-600 font-bold" : ""}`}
+              onClick={() => navigate("/app/Subscription")}
+              className={`hover:text-blue-600 ${location.pathname === "/app/Subscription" ? "text-blue-600 font-bold" : ""}`}
             >
-              الإعدادات
+              الباقات
             </button>
           </nav>
         )}
 
-        {/* 👤 أيقونة البروفايل */}
         {isLoggedIn && (
           <div className="relative order-3 lg:order-2 mr-auto lg:mr-0 lg:ml-35" ref={dropdownRef}>
             <button

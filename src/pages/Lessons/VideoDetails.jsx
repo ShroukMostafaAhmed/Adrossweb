@@ -79,7 +79,6 @@ function VideoDetails() {
         ? videoData.thumbnailUrl 
         : `https://adros-mrashed.runasp.net${videoData.thumbnailUrl}`;
 
-    // بناء وصف المدرس من البيانات المتاحة
     const teacherDescription = videoData.teacherName 
         ? `الأستاذ ${videoData.teacherName}${videoData.teacherAbout ? ` - ${videoData.teacherAbout}` : ''}`
         : "لم يتم تعيين مدرس لهذا الدرس بعد";
