@@ -21,16 +21,26 @@ function LessonDetails() {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-64">
-                <div className="text-xl">جاري تحميل الدرس...</div>
+            <div className="flex justify-center items-center min-h-screen px-4">
+                <div className="text-base sm:text-lg md:text-xl text-gray-700">
+                    جاري تحميل الدرس...
+                </div>
             </div>
         );
     }
 
     if (error) {
         return (
-            <div className="flex justify-center items-center h-64">
-                <div className="text-xl text-red-600">حدث خطأ أثناء تحميل الدرس</div>
+            <div className="flex flex-col justify-center items-center min-h-screen gap-3 sm:gap-4 px-4">
+                <div className="text-base sm:text-lg md:text-xl text-red-600 text-center">
+                    حدث خطأ أثناء تحميل الدرس
+                </div>
+                <button
+                    onClick={() => getLessonById(id)}
+                    className="px-4 sm:px-6 py-2 sm:py-2.5 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm sm:text-base"
+                >
+                    إعادة المحاولة
+                </button>
             </div>
         );
     }
@@ -47,37 +57,36 @@ function LessonDetails() {
         { label: lesson.title || "الدرس", href: "/lesson_details" }
     ];
 
- const BASE_FILE_URL = "https://api.example.com/";
+    const BASE_FILE_URL = "https://api.example.com/";
 
-const transformedAttachments = lesson.attachments?.map((attachment, index) => {
-  const fileUrl = attachment.url
-  ? attachment.url.startsWith("https")
-    ? attachment.url
-    : `${BASE_FILE_URL}${attachment.url}`
-  : null;
+    const transformedAttachments = lesson.attachments?.map((attachment, index) => {
+        const fileUrl = attachment.url
+            ? attachment.url.startsWith("https")
+                ? attachment.url
+                : `${BASE_FILE_URL}${attachment.url}`
+            : null;
 
+        let fileName = attachment.title || "ملف مرفق";
+        let fileExtension = "";
 
-  let fileName = attachment.title || "ملف مرفق";
-  let fileExtension = "";
+        if (fileUrl) {
+            const parts = fileUrl.split(".");
+            fileExtension = parts.length > 1 ? parts.pop().toLowerCase() : "";
+        }
 
-  if (fileUrl) {
-    const parts = fileUrl.split(".");
-    fileExtension = parts.length > 1 ? parts.pop().toLowerCase() : "";
-  }
+        const isPDF = fileExtension === "pdf";
 
-  const isPDF = fileExtension === "pdf";
-
-  return {
-    id: attachment.id || index + 1,
-    title: attachment.title || "الملفات المرفقة",
-    fileUrl,
-    isPDF,
-    fileName: fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`,
-    color: isPDF ? "red" : "blue",
-    image: <img src="/logo.png" className="w-8 h-8" />,
-    text: attachment.title || fileName,
-  };
-});
+        return {
+            id: attachment.id || index + 1,
+            title: attachment.title || "الملفات المرفقة",
+            fileUrl,
+            isPDF,
+            fileName: fileName.endsWith(".pdf") ? fileName : `${fileName}.pdf`,
+            color: isPDF ? "red" : "blue",
+            image: <img src="/logo.png" className="w-8 h-8" alt="logo" />,
+            text: attachment.title || fileName,
+        };
+    });
 
     const transformedVideos = lesson.videos?.map((video, index) => ({
         id: video.id || index + 1,
@@ -159,32 +168,41 @@ const transformedAttachments = lesson.attachments?.map((attachment, index) => {
     };
 
     return (
-        <>
-            {/* مؤشر التنزيل */}
+        <div className="min-h-screen pb-6 sm:pb-8 md:pb-10">
+            {/* Download Indicator */}
             {downloading && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white p-6 rounded-lg shadow-xl">
-                        <div className="flex flex-col items-center space-y-3">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-                            <p className="text-lg font-medium">جاري تنزيل الملف...</p>
-                            <p className="text-sm text-gray-600">يرجى الانتظار</p>
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+                    <div className="bg-white p-5 sm:p-6 md:p-8 rounded-lg shadow-xl max-w-sm w-full">
+                        <div className="flex flex-col items-center space-y-3 sm:space-y-4">
+                            <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-b-2 border-blue-600"></div>
+                            <p className="text-base sm:text-lg font-medium text-center">جاري تنزيل الملف...</p>
+                            <p className="text-xs sm:text-sm text-gray-600 text-center">يرجى الانتظار</p>
                         </div>
                     </div>
                 </div>
             )}
 
-            <Breadcrumb items={items} />
-            <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
+            {/* Breadcrumb */}
+            <div className="px-3 sm:px-4 md:px-6 lg:px-8">
+                <Breadcrumb items={items} />
+            </div>
+
+            {/* Banner Section */}
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 mb-6 sm:mb-8 md:mb-10">
                 <BannerCard
                     imageSrc="/stage1.png"
                     imageAlt="Stage Banner"
                     title={lesson.title}
                 />
             </div>
-            <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
-                <div dir="rtl">
-                    <div className="flex flex-row justify-start items-center gap-6">
-                        <h2 className="text-3xl font-bold px-6">تفاصيل الدرس</h2>
+
+            {/* Main Content */}
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12">
+                
+                {/* Lesson Details Section */}
+                <div dir="rtl" className="mb-8 sm:mb-10 md:mb-12">
+                    <div className="flex flex-row justify-start items-center mb-4 sm:mb-5 md:mb-6">
+                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">تفاصيل الدرس</h2>
                     </div>
                     <DetailsCard 
                         icon="lesson-icon.png"
@@ -192,44 +210,43 @@ const transformedAttachments = lesson.attachments?.map((attachment, index) => {
                     />
                 </div>
 
-               {transformedAttachments.length > 0 && (
-    <div className="flex flex-col gap-4 px-6">
-        <div className="flex flex-row justify-start items-center gap-6">
-            <h2 className="text-3xl font-bold py-4">المرفقات</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10">
-            {transformedAttachments.map((attachment) => (
-                <div 
-                    key={attachment.id}
-                    className="group"
-                >
-                    <div 
-                        className={`cursor-pointer ${downloading === attachment.id }`}
-                        onClick={() => handleCardClick(attachment)}
-                        title={attachment.text}
-                    >
-                        <Card
-                            id={attachment.id}
-                            href={attachment.url}
-                            color='blue'
-                            text={attachment.title}
-                            number={attachment.image}
-                            onClick={() => {}}
-                        />
-                       
-                    </div>
-                </div>
-            ))}
-        </div>
-    </div>
-)}
-
-                {transformedVideos.length > 0 && (
-                    <div className="flex flex-col gap-4 px-6 ">
-                        <div className="flex flex-row justify-start items-center gap-6">
-                            <h2 className="text-3xl font-bold py-4">شرح الدرس</h2>
+                {/* Attachments Section */}
+                {transformedAttachments && transformedAttachments.length > 0 && (
+                    <div dir="rtl" className="mb-8 sm:mb-10 md:mb-12">
+                        <div className="flex flex-row justify-start items-center mb-4 sm:mb-5 md:mb-6">
+                            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">المرفقات</h2>
                         </div>
-                        <div className="flex  gap-6 mt-6 max-w-10xl">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
+                            {transformedAttachments.map((attachment) => (
+                                <div 
+                                    key={attachment.id}
+                                    className={`group cursor-pointer transition-transform duration-200 hover:scale-105 ${
+                                        downloading === attachment.id ? 'opacity-50 pointer-events-none' : ''
+                                    }`}
+                                    onClick={() => handleCardClick(attachment)}
+                                    title={attachment.text}
+                                >
+                                    <Card
+                                        id={attachment.id}
+                                        href={attachment.url}
+                                        color='blue'
+                                        text={attachment.title}
+                                        number={attachment.image}
+                                        onClick={() => {}}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Videos Section */}
+                {transformedVideos.length > 0 && (
+                    <div dir="rtl" className="mb-8 sm:mb-10 md:mb-12">
+                        <div className="flex flex-row justify-start items-center mb-4 sm:mb-5 md:mb-6">
+                            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">شرح الدرس</h2>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 md:gap-5 lg:gap-6">
                             {transformedVideos.map((video) => (
                                 <VideoCard
                                     key={video.id}
@@ -240,13 +257,16 @@ const transformedAttachments = lesson.attachments?.map((attachment, index) => {
                     </div>
                 )}
 
+                {/* Empty State */}
                 {transformedAttachments.length === 0 && transformedVideos.length === 0 && (
-                    <div className="text-center py-10">
-                        <p className="text-xl text-gray-600">لا توجد مرفقات أو فيديوهات متاحة لهذا الدرس حالياً</p>
+                    <div className="text-center py-10 sm:py-12 md:py-16 px-4">
+                        <p className="text-base sm:text-lg md:text-xl text-gray-600">
+                            لا توجد مرفقات أو فيديوهات متاحة لهذا الدرس حالياً
+                        </p>
                     </div>
                 )}
             </div>
-        </>
+        </div>
     );
 }
 

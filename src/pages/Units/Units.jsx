@@ -45,7 +45,6 @@ function Units() {
         ]);
     }, [id]);
 
-    // جلب الوحدات حسب subjectId
     useEffect(() => {
         const subjectId = id || state?.subjectId;
         if (subjectId) {
@@ -53,7 +52,6 @@ function Units() {
         }
     }, [id, state?.subjectId, getUnitsBySubjectId]);
 
-    // الانتقال لصفحة الدروس
     const handleCardClick = (unit) => {
         navigate(`/app/lessons/${unit.id}`, {
             state: {
@@ -65,10 +63,14 @@ function Units() {
     };
 
     return (
-        <>
-            <Breadcrumb items={items} />
+        <div className="min-h-screen pb-8">
+            {/* Breadcrumb */}
+            <div className="px-3 sm:px-4 md:px-6 lg:px-8">
+                <Breadcrumb items={items} />
+            </div>
 
-            <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
+            {/* Banner */}
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 mb-6 sm:mb-8">
                 <BannerCard
                     imageSrc="/stage1.png"
                     imageAlt="Subject Banner"
@@ -76,52 +78,57 @@ function Units() {
                 />
             </div>
 
-            <div className="flex flex-col gap-4 px-6 pr-35">
-                <h2 className="text-2xl font-bold py-4">اختر الوحدة</h2>
+            {/* Content */}
+            <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12">
+                <div dir="rtl" className="mb-6 sm:mb-8">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
+                        اختر الوحدة
+                    </h2>
 
-                {loading && (
-                    <div className="text-center py-10 text-xl">
-                        جاري تحميل الوحدات...
+                    {loading && (
+                        <div className="text-center py-10 text-base sm:text-lg">
+                            جاري تحميل الوحدات...
+                        </div>
+                    )}
+
+                    {error && (
+                        <div className="text-center py-10 text-red-600 text-base sm:text-lg">
+                            ⚠️ {error}
+                        </div>
+                    )}
+
+                    {!loading && !error && units.length === 0 && (
+                        <div className="text-center py-10 text-gray-600 text-base sm:text-lg">
+                            لا توجد وحدات متاحة لهذه المادة حالياً
+                        </div>
+                    )}
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+                        {units.map((unit) => (
+                            <Card
+                                key={unit.id}
+                                id={unit.id}
+                                color="blue"
+                                text={unit.title}
+                                number={
+                                    <img
+                                        src="/logo.png"
+                                        alt={unit.title}
+                                        className="w-10 h-10 sm:w-12 sm:h-12"
+                                    />
+                                }
+                                description={
+                                    unit.description
+                                        ? `${unit.description.slice(0, 50)}...`
+                                        : "لا يوجد وصف"
+                                }
+                                onClick={() => handleCardClick(unit)}
+                            />
+                        ))}
                     </div>
-                )}
-
-                {error && (
-                    <div className="text-center py-10 text-red-600 text-xl">
-                        ⚠️ {error}
-                    </div>
-                )}
-
-                {!loading && !error && units.length === 0 && (
-                    <div className="text-center py-10 text-gray-600 text-xl">
-                        لا توجد وحدات متاحة لهذه المادة حالياً
-                    </div>
-                )}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10">
-                    {units.map((unit) => (
-                        <Card
-                            key={unit.id}
-                            id={unit.id}
-                            color="blue"
-                            text={unit.title}
-                            number={
-                                <img
-                                    src="/logo.png"
-                                    alt={unit.title}
-                                    className="w-12 h-12"
-                                />
-                            }
-                            description={
-                                unit.description
-                                    ? `${unit.description.slice(0, 50)}...`
-                                    : "لا يوجد وصف"
-                            }
-                            onClick={() => handleCardClick(unit)}
-                        />
-                    ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 }
 

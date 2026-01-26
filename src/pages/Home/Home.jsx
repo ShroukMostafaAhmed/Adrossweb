@@ -6,7 +6,7 @@ import VideoCard from "../../components/Cards/VideoCard.jsx";
 import useGetHomeData from '../../hooks/useHome/useGetHomeData.js';
 import useGetAllSkills from '../../hooks/useSkills/useGetAllSkills.js';
 import BackgroundShapes from "../../components/BackgroundShapes.jsx";
-import SideImages from "../../components/SideImages.jsx";
+// import SideImages from "../../components/SideImages.jsx";
 
 function Home() {
   const { fetchHomeData, data, isLoading, error } = useGetHomeData();

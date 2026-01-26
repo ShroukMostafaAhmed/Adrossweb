@@ -28,7 +28,7 @@ const Header = () => {
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: "-100px 0px -50% 0px", // Compensate for header height
+      rootMargin: "-100px 0px -50% 0px",
       threshold: 0.3,
     };
 

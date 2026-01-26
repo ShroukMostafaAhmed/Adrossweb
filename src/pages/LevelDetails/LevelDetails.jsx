@@ -37,7 +37,7 @@ function LevelDetails() {
   const handleCardClick = (sub) => {
     const newState = {
       id: sub.id,
-      title: location.state?.title || localStorage.getItem("stageDetailsState"),
+      title: location.state?.title || JSON.parse(localStorage.getItem("stageDetailsState"))?.title,
       subtitle: location.state?.text || "",
       text: sub.title
     };
@@ -55,38 +55,61 @@ function LevelDetails() {
   }, []);
 
   return (
-    <>
-      <Breadcrumb items={items} />
-      <div className="w-full px-4 sm:px-6 md:px-12 lg:px-20 xl:px-35">
+    <div className="min-h-screen pb-8">
+      {/* Breadcrumb */}
+      <div className="px-3 sm:px-4 md:px-6 lg:px-8">
+        <Breadcrumb items={items} />
+      </div>
+
+      {/* Banner */}
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12 mb-6 sm:mb-8">
         <BannerCard
           imageSrc="/stage1.png"
           imageAlt="Stage Banner"
-          title={state.title}
+          title={state.title || "المستوى"}
         />
       </div>
 
+      {/* Content */}
+      <div className="w-full max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 xl:px-12">
+        <div dir="rtl" className="mb-6 sm:mb-8">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-4">
+            اختر المادة
+          </h2>
 
-      <div className="flex flex-col gap-4 px-6 pr-35">
-        <h2 className="text-2xl font-bold py-4">اختر المادة</h2>
+          {loading && (
+            <p className="text-base sm:text-lg text-center py-6">جاري تحميل المواد...</p>
+          )}
+          {error && (
+            <p className="text-base sm:text-lg text-red-600 text-center py-6">⚠️ {error}</p>
+          )}
+          {!loading && !error && (subjects || []).length === 0 && (
+            <p className="text-base sm:text-lg text-gray-600 text-center py-6">
+              لا توجد مواد متاحة لهذا المستوى حالياً
+            </p>
+          )}
 
-        {loading && <p>جاري تحميل المواد...</p>}
-        {error && <p className="text-red-600">⚠️ {error}</p>}
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mb-10 ">
-          {(subjects || []).map((sub) => (
-            <Card
-              key={sub.id}
-              id={sub.id}
-              href={`/Units/${sub.id}`}
-              color="blue"
-              text={sub.title}
-              number={<img src="/logo.png" alt={sub.name} className="w-12 h-12" />}
-              onClick={() => handleCardClick(sub)}
-            />
-          ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5 md:gap-6 mb-10">
+            {(subjects || []).map((sub) => (
+              <Card
+                key={sub.id}
+                id={sub.id}
+                color="blue"
+                text={sub.title}
+                number={
+                  <img
+                    src="/logo.png"
+                    alt={sub.title}
+                    className="w-10 h-10 sm:w-12 sm:h-12"
+                  />
+                }
+                onClick={() => handleCardClick(sub)}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
