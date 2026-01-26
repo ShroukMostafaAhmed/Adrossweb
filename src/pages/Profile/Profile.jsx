@@ -169,7 +169,6 @@ const Profile = () => {
     },
   ];
 
-  // البيانات الوهمية بنفس تنسيق ال API
   const staticChartData = [
     { day: "السبت", value: "00:20:00" },
     { day: "الأحد", value: "00:35:00" },
@@ -183,7 +182,7 @@ const Profile = () => {
   const chartData = Array.isArray(dailyAch) && dailyAch.length > 0
     ? dailyAch.map(({ day, studyTime }) => ({
         day,
-        value: studyTime, // نمرر الوقت كما هو من ال API
+        value: studyTime, 
       }))
     : staticChartData;
 

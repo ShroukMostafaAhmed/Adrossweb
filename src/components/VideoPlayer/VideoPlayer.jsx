@@ -2,7 +2,6 @@ import React, { useMemo, useRef, useEffect } from "react";
 import Player from "@vimeo/player";
 import useVideoView from "../../hooks/useVideos/useVideoView";
 
-/* ================= Helpers ================= */
 
 const VIMEO_ID = /^\d+$/;
 const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
@@ -27,17 +26,17 @@ function extractVideoInfo(url) {
     const id = url.match(/vimeo\.com\/(?:video\/)?(\d+)/)?.[1];
 
     if (id && VIMEO_ID.test(id)) {
-      return {
-        type: "vimeo",
-        embedUrl: `https://player.vimeo.com/video/${id}`
-      };
+     return {
+  type: "vimeo",
+  embedUrl: `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0`
+};
+
     }
   }
 
   return { type: "file", embedUrl: url };
 }
 
-/* ================= Component ================= */
 
 export default function VideoPlayer({ videoUrl, videoId, title }) {
   const iframeRef = useRef(null);
@@ -53,8 +52,6 @@ export default function VideoPlayer({ videoUrl, videoId, title }) {
     () => extractVideoInfo(videoUrl),
     [videoUrl]
   );
-
-  /* ========== INIT VIMEO ========== */
 
   const initVimeo = async () => {
     if (!iframeRef.current || playerRef.current) return;
@@ -99,8 +96,6 @@ export default function VideoPlayer({ videoUrl, videoId, title }) {
       playerRef.current?.destroy();
     };
   }, []);
-
-  /* ================= Render ================= */
 
   if (videoInfo.type === "youtube") {
     return (

@@ -4,7 +4,6 @@ const BarCharts = ({ data = [] }) => {
   if (!data || data.length === 0)
     return <p className="text-center text-gray-500 mt-6">لا توجد بيانات لعرضها</p>;
 
-  // دالة لتحويل الوقت من HH:MM:SS إلى دقائق (للرسم البياني فقط)
   const timeToMinutes = (timeStr) => {
     if (!timeStr || timeStr === "00:00:00") return 0;
     const parts = timeStr.split(':');
@@ -14,20 +13,17 @@ const BarCharts = ({ data = [] }) => {
     return hours * 60 + minutes + (seconds / 60);
   };
 
-  // دالة لتنسيق الوقت للعرض (كما هو من API)
   const formatTimeDisplay = (timeStr) => {
     if (!timeStr || timeStr === "00:00:00") return "00:00:00";
     return timeStr;
   };
 
-  // تحضير البيانات للرسم البياني
   const chartData = data.map(item => ({
     day: item.day,
     originalTime: item.value || "00:00:00",
     valueInMinutes: timeToMinutes(item.value),
   }));
 
-  // التولتيب المخصص
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
