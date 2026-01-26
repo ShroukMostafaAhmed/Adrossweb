@@ -26,31 +26,21 @@ const Profile = () => {
   const [profileImage, setProfileImage] = useState("");
   const objectUrlRef = useRef(null);
 
-
-  const api = data || {};
-  const firstName = api.firstName ?? api.FirstName ?? "";
-  const lastName = api.lastName ?? api.LastName ?? "";
-  const name = api.name ?? "";
-  const level = api.level ?? api.Level ?? "غير محدد";
-  const views = api.viewsCount ?? api.ViewsCount ?? 0;
-  const downloads = api.downloadsCount ?? api.DownloadsCount ?? 0;
-  const totalStudy = api.totalStudyTime ?? api.TotalStudyTime ?? "00:00:00";
-  const dailyAch = api.dailyAchievements ?? api.DailyAchievements ?? [];
-  const phone = api.phoneNumber ?? api.PhoneNumber ?? "";
-
-  const displayName =
-    [firstName, lastName]
-      .map(s => (s ?? '').trim())
-      .filter(Boolean)
-      .join('\u00A0') ||     // NBSP
-    (name?.trim() || "اسم الطالب");
+  const api = data?.data || data || {};
+  const name = api.name || "اسم الطالب";
+  const level = api.level || "غير محدد";
+  const views = api.viewsCount || 0;
+  const lessonCount = api.lessonCount || 0; 
+  const totalStudy = api.totalStudyTime || "00:00:00";
+  const dailyAch = api.dailyAchievements || [];
+  const displayName = name.trim();
 
   const serverImagePath = (api.imagePath ?? "").trim();
 
   const photoKey = useMemo(() => {
-    const idPart = (phone && String(phone).trim()) || displayName || "me";
+    const idPart = (name && String(name).trim()) || "me";
     return `profilePhoto:${idPart}`;
-  }, [phone, displayName]);
+  }, [name]);
 
   useEffect(() => {
     let cancelled = false;
@@ -103,7 +93,6 @@ const Profile = () => {
       }
     };
   }, [photoKey, serverImagePath]);
-
 
   const handlePhotoUpdate = async (event) => {
     const file = event.target.files?.[0];
@@ -158,16 +147,16 @@ const Profile = () => {
       color: "blue",
       image: <img src="/book.png" alt="icon" className="w-6 h-6 sm:w-8 sm:h-8" />,
       text: String(views),
-      desc: "الدروس الكلية",
+      desc: "عدد المشاهدات",
     },
     {
       id: 2,
-      title: String(downloads),
+      title: String(lessonCount),
       href: "#",
       color: "yellow",
       image: <img src="/download.png" alt="icon" className="w-6 h-6 sm:w-8 sm:h-8" />,
-      text: String(downloads),
-      desc: "الدروس المحملة",
+      text: String(lessonCount),
+      desc: "عدد الدروس",
     },
     {
       id: 3,
@@ -179,25 +168,23 @@ const Profile = () => {
       desc: "زمن الدراسة",
     },
   ];
-const staticChartData = [
-  { day: "السبت", value: 20 },
-  { day: "الأحد", value: 35 },
-  { day: "الاثنين", value: 50 },
-  { day: "الثلاثاء", value: 30 },
-  { day: "الأربعاء", value: 55 },
-  { day: "الخميس", value: 45 },
-  { day: "الجمعة", value: 25 },
-];
 
-  const newLocal = Array.isArray(dailyAch) && dailyAch.length > 0
+  const staticChartData = [
+    { day: "السبت", value: 20 },
+    { day: "الأحد", value: 35 },
+    { day: "الاثنين", value: 50 },
+    { day: "الثلاثاء", value: 30 },
+    { day: "الأربعاء", value: 55 },
+    { day: "الخميس", value: 45 },
+    { day: "الجمعة", value: 25 },
+  ];
+
+  const chartData = Array.isArray(dailyAch) && dailyAch.length > 0
     ? dailyAch.map(({ day, studyTime }) => ({
-      day,
-      value: parseInt(studyTime) || 0,
-    }))
+        day,
+        value: parseInt(studyTime) || 0,
+      }))
     : staticChartData;
- const chartData =
-  newLocal;
-
 
   return (
     <div className={`font-bold px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 ${isLoggedIn ? "md:mr-[4px]" : ""}`} dir="rtl">
@@ -234,11 +221,10 @@ const staticChartData = [
             </label>
           </div>
 
-          {/* الاسم/الهاتف/المستوى */}
+          {/* الاسم/المستوى */}
           <div className="flex flex-col items-center gap-2 sm:gap-3 w-full max-w-sm">
             <p className="text-lg sm:text-xl font-bold text-gray-800 mt-1 text-center">{displayName}</p>
           </div>
-          <p className="text-gray-500 text-xs sm:text-sm">{phone}</p>
           <p className="text-gray-600 text-xs sm:text-sm">{level}</p>
         </div>
       </div>
@@ -246,9 +232,9 @@ const staticChartData = [
       {/* كروت الإحصائيات */}
       <div className="flex flex-col gap-3 sm:gap-4 xl:pr-35">
         <div className="flex flex-row justify-start items-center gap-4 sm:gap-6 pb-6 sm:pb-8 md:pb-10 ">
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold py-2 sm:py-4">الدروس</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold py-2 sm:py-4">الإحصائيات</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:gap-10 lg:grid-cols-3 gap-3 sm:gap-4 md:gap-5 max-w-7xl mb-6 sm:mb-8 md:mb-10 w-full xl-pr-35">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:gap-10 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-5 max-w-7xl mb-6 sm:mb-8 md:mb-10 w-full xl-pr-35">
           {lessons.map((lesson) => (
             <Card
               key={lesson.id}

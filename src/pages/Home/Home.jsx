@@ -43,7 +43,7 @@ function Home() {
 
       <div className="hidden sm:block">
         <BackgroundShapes />
-        <SideImages />
+        {/* <SideImages />  */}
       </div>
 
       <div className="my-6 pb-8 relative z-10 w-full">

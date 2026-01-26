@@ -10,27 +10,27 @@ const Slider = ({ products }) => {
             freeMode={true}
             dir={"rtl"}
             autoplay={{
-                delay: 1000, // Continuous movement
+                delay: 1000,
                 disableOnInteraction: false,
-                pauseOnMouseEnter: true, // Pause on hover
+                pauseOnMouseEnter: true,
             }}
-            speed={3000} // Controls scrolling speed
-            loop={true} // Infinite loop
-            grabCursor={true} // Enables drag-scroll
-            slidesPerView="auto" // Multiple cards visible
-            spaceBetween={20} // ✅ Reduced space for mobile
-            className="w-full overflow-hidden" // ✅ Fixed container width
+            speed={3000} 
+            loop={true} 
+            grabCursor={true} 
+            slidesPerView="auto" 
+            spaceBetween={20} 
+            className="w-full overflow-hidden" 
         >
             {products.map((product) => (
                 <SwiperSlide
                     key={product.id}
-                    className="max-w-[100%] sm:max-w-[400px] lg:max-w-[800px]" // ✅ Responsive slide width
+                    className="max-w-[100%] sm:max-w-[400px] lg:max-w-[800px]" 
                 >
                     <div className="w-full bg-white my-6 rounded-[60px] sm:rounded-[120px] shadow-amber-50">
                         <img
                             src={product.imageUrl}
                             alt={product.title}
-                            className="rounded-[50px] sm:rounded-lg w-full h-auto object-cover" // ✅ Consistent width, responsive border radius
+                            className="rounded-[50px] sm:rounded-lg w-full h-auto object-cover" 
                         />
                     </div>
                 </SwiperSlide>

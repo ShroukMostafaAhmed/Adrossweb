@@ -6,31 +6,61 @@ function LevelsCard({ id, title, imagePath }) {
 
     return (
         <div
-            className="relative w-60 lg:w-200 h-90 rounded-xl overflow-hidden my-4 lg:my-0 lg:rounded-3xl"
+className="relative w-full sm:w-72 md:w-80 lg:w-140 xl:w-170  rounded-xl overflow-hidden my-4 lg:my-0 lg:rounded-3xl"
         >
             {/* صورة الخلفية */}
             <img
                 src={imagePath}
                 alt={title}
-                className="w-3xl h-70 object-cover rounded-2xl transition-transform duration-300 hover:scale-105"
+                className="w-full h-40 sm:h-70 md:h-40 lg:h-80 xl:h-80 rounded-2xl transition-transform duration-300 hover:scale-105"
             />
 
-            {/* النصوص والزر - جهة اليمين */}
-            <div className="absolute inset-0 flex flex-col justify-center items-start p-4 text-left bg-gradient-to-l from-white/70 via-white/30 to-transparent ">
-                <h3 className="text-white text-3xl font-bold mb-15">{title}</h3>
+             <div
+    className="
+      absolute 
+      inset-0 
+      flex 
+      flex-col 
+      justify-center 
+      items-start 
+      gap-4
+      p-2
+      lg:py-50
+      xl:py-50
+      lg:pr-10
+      xl:pr-10
+      text-right
+     
+    "
+  >
+    <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-bold">
+      {title}
+    </h3>
 
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        navigate('/app/level_Details/' + id, {
-                            state: { id, title }
-                        });
-                    }}
-                    className="bg-blue-600 text-white text-lg px-4 py-2 w-80 rounded-md hover:bg-blue-700 cursor-pointer transition-colors duration-200"
-                >
-                    عرض الدروس
-                </button>
-            </div>
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        navigate('/app/level_Details/' + id, {
+          state: { id, title }
+        });
+      }}
+      className="
+        bg-blue-600 
+        text-white 
+        text-sm 
+        sm:text-base
+        px-6 
+        py-2 
+        rounded-lg 
+        hover:bg-blue-700 
+        transition-colors 
+        duration-200
+        w-fit
+      "
+    >
+      عرض الدروس
+    </button>
+  </div>
         </div>
     );
 }
