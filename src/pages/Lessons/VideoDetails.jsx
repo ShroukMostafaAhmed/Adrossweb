@@ -97,11 +97,13 @@ useEffect(() => {
       <div className="w-full max-w-screen-3xl px-35 py-10">
         <div dir="rtl" className="px-4 lg:px-12">
           <div className="relative">
-            <VideoPlayer
-              videoUrl={videoData.url}
-              thumbnailUrl={thumbnailUrl}
-              title={videoData.title}
-            />
+           <VideoPlayer
+  videoUrl={videoData.url}
+  videoId={videoId}   
+  thumbnailUrl={thumbnailUrl}
+  title={videoData.title}
+/>
+
 
             <button
               onClick={handleToggleWatchLater}

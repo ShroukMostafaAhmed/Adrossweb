@@ -25,13 +25,13 @@ function WatchLater() {
     if (!videos || videos.length === 0) return [];
 
     return videos.map(video => ({
-      id: video.id, // watchLaterId (لـ key فقط)
+      id: video.id, 
       title: video.videoName || video.title,
       desc: video.description || "شرح الدرس",
       thumbnailUrl: video.thumbnailUrl?.startsWith("https")
         ? video.thumbnailUrl
         : `https://adros-mrashed.runasp.net${video.thumbnailUrl}`,
-      href: `/app/video_details/${video.videoId}`, // ✅ ID الفيديو الحقيقي
+      href: `/app/video_details/${video.videoId}`, 
       duration: video.duration,
     }));
   }, [videos]);

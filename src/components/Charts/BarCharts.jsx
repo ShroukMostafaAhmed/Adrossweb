@@ -4,15 +4,52 @@ const BarCharts = ({ data = [] }) => {
   if (!data || data.length === 0)
     return <p className="text-center text-gray-500 mt-6">لا توجد بيانات لعرضها</p>;
 
+  // دالة لتحويل الوقت من HH:MM:SS إلى دقائق (للرسم البياني فقط)
+  const timeToMinutes = (timeStr) => {
+    if (!timeStr || timeStr === "00:00:00") return 0;
+    const parts = timeStr.split(':');
+    const hours = parseInt(parts[0]) || 0;
+    const minutes = parseInt(parts[1]) || 0;
+    const seconds = parseInt(parts[2]) || 0;
+    return hours * 60 + minutes + (seconds / 60);
+  };
+
+  // دالة لتنسيق الوقت للعرض (كما هو من API)
+  const formatTimeDisplay = (timeStr) => {
+    if (!timeStr || timeStr === "00:00:00") return "00:00:00";
+    return timeStr;
+  };
+
+  // تحضير البيانات للرسم البياني
+  const chartData = data.map(item => ({
+    day: item.day,
+    originalTime: item.value || "00:00:00",
+    valueInMinutes: timeToMinutes(item.value),
+  }));
+
+  // التولتيب المخصص
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-3 rounded-lg shadow-lg border border-gray-200">
+          <p className="font-semibold text-gray-800">اليوم: {label}</p>
+          <p className="text-blue-600">
+            الزمن: {payload[0]?.payload?.originalTime || "00:00:00"}
+          </p>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="w-full max-w-6xl mt-10 p-6 rounded-xl">
       <ResponsiveContainer width="100%" height={400}>
         <BarChart
-          data={data}
+          data={chartData}
           barGap={6}
-          margin={{ top: 10, right: 30, left: 30, bottom: 10 }}
+          margin={{ top: 50, right: 30, left: 30, bottom: 10 }}
         >
-          {/* X Axis */}
           <XAxis
             dataKey="day"
             tick={{ fill: '#94A3B8', fontSize: 16, fontWeight: '600' }}
@@ -20,29 +57,28 @@ const BarCharts = ({ data = [] }) => {
             tickLine={false}
           />
 
-          {/* Tooltip */}
           <Tooltip
-            contentStyle={{
-              backgroundColor: '#FFFFFF',
-              borderRadius: '8px',
-              border: '1px solid #E5E7EB',
-              color: '#1E293B',
-              fontSize: '16px',
-            }}
-            wrapperStyle={{ outline: 'none' }}
+            content={<CustomTooltip />}
             cursor={{ fill: 'transparent' }}
-            labelFormatter={(label) => `اليوم: ${label}`}
-            formatter={(value) => [`${value} دقيقة`, 'الزمن']}
+            offset={10}
           />
 
-          {/* Bars */}
           <Bar
-            dataKey="value"
+            dataKey="valueInMinutes"
             radius={[10, 10, 0, 0]}
             barSize={50}
-            label={{ position: 'top', fill: '#1D4ED8', fontSize: 14 }}
+            label={{
+              position: 'top',
+              fill: '#1D4ED8',
+              fontSize: 14,
+              fontWeight: '600',
+              formatter: (value) => {
+                const item = chartData.find(d => d.valueInMinutes === value);
+                return item ? item.originalTime : "00:00:00";
+              }
+            }}
           >
-            {data.map((entry, index) => (
+            {chartData.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
                 fill={entry.day === 'الأربعاء' ? '#FF6B6B' : '#1E78EB'}
@@ -51,21 +87,6 @@ const BarCharts = ({ data = [] }) => {
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-
-      {/* القيم تحت الأعمدة */}
-      <div className="flex justify-around mt-3 px-1">
-        {data.map((entry) => (
-          <div key={entry.day} className="flex flex-col items-center flex-1 text-center">
-            <span
-              className={`font-semibold text-xl ${
-                entry.day === 'الأربعاء' ? 'text-[#FF6B6B]' : 'text-[#1D4ED8]'
-              }`}
-            >
-              {entry.value} د
-            </span>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };

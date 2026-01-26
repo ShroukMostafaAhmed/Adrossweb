@@ -142,21 +142,21 @@ const Profile = () => {
   const lessons = [
     {
       id: 1,
-      title: String(views),
+      title: String(lessonCount),
       href: "#",
       color: "blue",
       image: <img src="/book.png" alt="icon" className="w-6 h-6 sm:w-8 sm:h-8" />,
-      text: String(views),
-      desc: "عدد المشاهدات",
+      text: String(lessonCount),
+      desc: "عدد الدروس",
     },
     {
       id: 2,
-      title: String(lessonCount),
+      title: String(views),
       href: "#",
       color: "yellow",
       image: <img src="/download.png" alt="icon" className="w-6 h-6 sm:w-8 sm:h-8" />,
-      text: String(lessonCount),
-      desc: "عدد الدروس",
+      text: String(views),
+      desc: "عدد المشاهدات",
     },
     {
       id: 3,
@@ -169,20 +169,21 @@ const Profile = () => {
     },
   ];
 
+  // البيانات الوهمية بنفس تنسيق ال API
   const staticChartData = [
-    { day: "السبت", value: 20 },
-    { day: "الأحد", value: 35 },
-    { day: "الاثنين", value: 50 },
-    { day: "الثلاثاء", value: 30 },
-    { day: "الأربعاء", value: 55 },
-    { day: "الخميس", value: 45 },
-    { day: "الجمعة", value: 25 },
+    { day: "السبت", value: "00:20:00" },
+    { day: "الأحد", value: "00:35:00" },
+    { day: "الاثنين", value: "00:50:00" },
+    { day: "الثلاثاء", value: "00:30:00" },
+    { day: "الأربعاء", value: "00:55:00" },
+    { day: "الخميس", value: "00:45:00" },
+    { day: "الجمعة", value: "00:25:00" },
   ];
 
   const chartData = Array.isArray(dailyAch) && dailyAch.length > 0
     ? dailyAch.map(({ day, studyTime }) => ({
         day,
-        value: parseInt(studyTime) || 0,
+        value: studyTime, // نمرر الوقت كما هو من ال API
       }))
     : staticChartData;
 
@@ -252,7 +253,7 @@ const Profile = () => {
 
       {/* الشارت */}
       <div className="w-full ">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold py-2 sm:py-4 xl:pr-35">التقويم اليومى</h2>
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold py-2 sm:py-4 xl:pr-35">التقييم اليومى</h2>
         <div className="w-full overflow-x-auto xl:pr-35">
           <BarCharts data={chartData} />
         </div>
