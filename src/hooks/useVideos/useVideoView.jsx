@@ -4,76 +4,56 @@ import axios from "axios";
 export default function useVideoView(videoId) {
   const lastSecondRef = useRef(0);
   const startedRef = useRef(false);
+  const completedRef = useRef(false);
 
- const send = async (payload) => {
-  if (!videoId) return;
+  const send = async (payload) => {
+    if (!videoId) return;
 
-  const token = localStorage.getItem("Token"); 
+    const token = localStorage.getItem("Token");
 
-  console.log("Sending video view payload:", payload);
-
-  try {
-    const response = await axios.post(
-      `https://adros-mrashed.runasp.net/api/Video/${videoId}/view`,
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          ...(token && {
-            Authorization: `Bearer ${token}`
-          })
+    try {
+      const response = await axios.post(
+        `https://adros-mrashed.runasp.net/api/Video/${videoId}/view`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            ...(token && { Authorization: `Bearer ${token}` })
+          }
         }
-      }
-    );
+      );
 
-    console.log("Response status:", response.status);
-    console.log("Response data:", response.data);
-  } catch (err) {
-    console.error(
-      "Video view tracking error:",
-      err?.response?.data || err
-    );
-  }
-};
-
+      console.log("Video tracking sent:", payload, response.data);
+    } catch (err) {
+      console.error("Video tracking error:", err?.response?.data || err);
+    }
+  };
 
   return {
-    start: async () => {
+    // start بس للـ internal tracking، مش هتبعت للباك
+    start: () => {
       if (startedRef.current) return;
       startedRef.current = true;
-
-      await send({
-        
-        watchedSeconds: 0
-      });
+      lastSecondRef.current = 0;
     },
 
+    // pause: ابعت آخر ثانية للباك
     pause: async (second) => {
       lastSecondRef.current = Math.floor(second);
-
-      await send({
-       
-        watchedSeconds: lastSecondRef.current
-      });
+      await send({ watchedSeconds: lastSecondRef.current });
     },
 
-    progress: async (second) => {
-      const current = Math.floor(second);
-      if (current === lastSecondRef.current) return;
-
-      lastSecondRef.current = current;
-
-      await send({
-       
-        watchedSeconds: current
-      });
+    // progress: internal tracking فقط، مش تبعت حاجة
+    progress: (second) => {
+      lastSecondRef.current = Math.floor(second);
     },
 
+    // complete: ابعت آخر ثانية للباك مرة واحدة فقط
     complete: async () => {
-      await send({
-        
-        watchedSeconds: lastSecondRef.current
-      });
+      if (completedRef.current) return;
+      completedRef.current = true;
+
+      await send({ watchedSeconds: lastSecondRef.current });
     }
   };
 }
